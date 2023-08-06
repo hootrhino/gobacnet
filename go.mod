@@ -1,4 +1,4 @@
-module github.com/NubeDev/bacnet
+module github.com/BeatTime/bacnet
 
 go 1.17
 
