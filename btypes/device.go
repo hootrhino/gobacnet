@@ -2,8 +2,8 @@ package btypes
 
 import (
 	"fmt"
-	ip2bytes "github.com/NubeDev/bacnet/helpers/ipbytes"
-	"github.com/NubeDev/bacnet/helpers/validation"
+	ip2bytes "github.com/BeatTime/bacnet/helpers/ipbytes"
+	"github.com/BeatTime/bacnet/helpers/validation"
 )
 
 type Enumerated uint32

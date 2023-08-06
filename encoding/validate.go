@@ -3,7 +3,7 @@ package encoding
 import (
 	"fmt"
 
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 func isValidObjectType(idType btypes.ObjectType) error {

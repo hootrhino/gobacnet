@@ -1,6 +1,6 @@
 package encoding
 
-import "github.com/NubeDev/bacnet/btypes"
+import "github.com/BeatTime/bacnet/btypes"
 
 // WriteMultiProperty encodes a writes property request
 func (e *Encoder) WriteMultiProperty(invokeID uint8, data btypes.MultiplePropertyData) error {

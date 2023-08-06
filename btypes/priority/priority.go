@@ -1,9 +1,9 @@
 package priority
 
 import (
-	"github.com/NubeDev/bacnet/btypes"
-	"github.com/NubeDev/bacnet/helpers/data"
-	"github.com/NubeDev/bacnet/helpers/nils"
+	"github.com/BeatTime/bacnet/btypes"
+	"github.com/BeatTime/bacnet/helpers/data"
+	"github.com/BeatTime/bacnet/helpers/nils"
 	"reflect"
 )
 

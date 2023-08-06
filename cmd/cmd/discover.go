@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"encoding/json"
-	"github.com/NubeDev/bacnet"
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet"
+	"github.com/BeatTime/bacnet/btypes"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"os"

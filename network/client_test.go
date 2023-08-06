@@ -2,11 +2,11 @@ package network
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet"
-	"github.com/NubeDev/bacnet/btypes"
-	segmentation2 "github.com/NubeDev/bacnet/btypes/segmentation"
+	"github.com/BeatTime/bacnet"
+	"github.com/BeatTime/bacnet/btypes"
+	segmentation2 "github.com/BeatTime/bacnet/btypes/segmentation"
 
-	//"github.com/NubeDev/bacnet"
+	//"github.com/BeatTime/bacnet"
 
 	"testing"
 )

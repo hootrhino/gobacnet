@@ -2,8 +2,8 @@ package encoding
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes"
-	"github.com/NubeDev/bacnet/btypes/null"
+	"github.com/BeatTime/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes/null"
 )
 
 const (

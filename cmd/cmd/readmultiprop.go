@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet"
-	"github.com/NubeDev/bacnet/btypes"
-	"github.com/NubeDev/bacnet/helpers/data"
-	ip2bytes "github.com/NubeDev/bacnet/helpers/ipbytes"
+	"github.com/BeatTime/bacnet"
+	"github.com/BeatTime/bacnet/btypes"
+	"github.com/BeatTime/bacnet/helpers/data"
+	ip2bytes "github.com/BeatTime/bacnet/helpers/ipbytes"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

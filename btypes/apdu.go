@@ -2,7 +2,7 @@ package btypes
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes/bacerr"
+	"github.com/BeatTime/bacnet/btypes/bacerr"
 )
 
 /*

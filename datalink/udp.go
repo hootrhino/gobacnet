@@ -2,7 +2,7 @@ package datalink
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 	"net"
 	"strings"
 )
@@ -61,6 +61,10 @@ func dataLink(ipAddr string, port int) (DataLink, error) {
 	if port == 0 {
 		port = DefaultPort
 	}
+	if port == -1 {
+		// random
+		port = 0
+	}
 
 	ip, ipNet, err := net.ParseCIDR(ipAddr)
 	if err != nil {
@@ -74,6 +78,8 @@ func dataLink(ipAddr string, port int) (DataLink, error) {
 
 	udp, _ := net.ResolveUDPAddr("udp4", fmt.Sprintf(":%d", port))
 	conn, err := net.ListenUDP("udp", udp)
+	udpAddr := conn.LocalAddr().(*net.UDPAddr)
+	port = udpAddr.Port
 	if err != nil {
 		return nil, err
 	}

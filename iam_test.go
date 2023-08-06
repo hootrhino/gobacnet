@@ -2,7 +2,7 @@ package bacnet
 
 import (
 	"fmt"
-	pprint "github.com/NubeDev/bacnet/helpers/print"
+	pprint "github.com/BeatTime/bacnet/helpers/print"
 	"go/build"
 	"os"
 	"testing"

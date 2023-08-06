@@ -2,9 +2,9 @@ package network
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet"
-	"github.com/NubeDev/bacnet/btypes"
-	"github.com/NubeDev/bacnet/helpers/store"
+	"github.com/BeatTime/bacnet"
+	"github.com/BeatTime/bacnet/btypes"
+	"github.com/BeatTime/bacnet/helpers/store"
 	"github.com/pkg/errors"
 )
 

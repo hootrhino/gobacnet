@@ -2,13 +2,13 @@ package encoding
 
 import (
 	"encoding/json"
-	pprint "github.com/NubeDev/bacnet/helpers/print"
+	pprint "github.com/BeatTime/bacnet/helpers/print"
 	"log"
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 func TestReadPropertyService(t *testing.T) {

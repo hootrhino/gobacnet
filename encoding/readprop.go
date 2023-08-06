@@ -3,7 +3,7 @@ package encoding
 import (
 	"fmt"
 
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 func (e *Encoder) readPropertyHeader(tagPos uint8, data *btypes.PropertyData) (uint8, error) {

@@ -2,8 +2,8 @@ package network
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes"
-	pprint "github.com/NubeDev/bacnet/helpers/print"
+	"github.com/BeatTime/bacnet/btypes"
+	pprint "github.com/BeatTime/bacnet/helpers/print"
 	"testing"
 )
 

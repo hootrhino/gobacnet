@@ -2,8 +2,8 @@ package cmd2
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet"
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet"
+	"github.com/BeatTime/bacnet/btypes"
 	"github.com/spf13/cobra"
 	"log"
 )

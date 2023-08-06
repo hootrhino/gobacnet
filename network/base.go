@@ -2,7 +2,7 @@ package network
 
 import (
 	"errors"
-	"github.com/NubeDev/bacnet"
+	"github.com/BeatTime/bacnet"
 	log "github.com/sirupsen/logrus"
 )
 

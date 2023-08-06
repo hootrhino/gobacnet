@@ -1,6 +1,6 @@
 package encoding
 
-import "github.com/NubeDev/bacnet/btypes"
+import "github.com/BeatTime/bacnet/btypes"
 
 /* refer to https://github.com/bacnet-stack/bacnet-stack/blob/bacnet-stack-0.9.1/src/bacapp.c#L583 */
 /* returns the fixed tag type for certain context tagged properties */

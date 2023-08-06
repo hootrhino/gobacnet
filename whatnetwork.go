@@ -2,9 +2,9 @@ package bacnet
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes"
-	"github.com/NubeDev/bacnet/btypes/ndpu"
-	"github.com/NubeDev/bacnet/encoding"
+	"github.com/BeatTime/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes/ndpu"
+	"github.com/BeatTime/bacnet/encoding"
 )
 
 /*

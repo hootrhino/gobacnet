@@ -2,9 +2,9 @@ package encoding
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes/bacerr"
+	"github.com/BeatTime/bacnet/btypes/bacerr"
 
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 func (e *Encoder) APDU(a btypes.APDU) error {

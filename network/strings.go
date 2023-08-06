@@ -1,8 +1,8 @@
 package network
 
 import (
-	"github.com/NubeDev/bacnet"
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 //ReadString to read a string like objectName

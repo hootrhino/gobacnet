@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet"
-	pprint "github.com/NubeDev/bacnet/helpers/print"
-	"github.com/NubeDev/bacnet/network"
+	"github.com/BeatTime/bacnet"
+	pprint "github.com/BeatTime/bacnet/helpers/print"
+	"github.com/BeatTime/bacnet/network"
 	"github.com/spf13/cobra"
 )
 

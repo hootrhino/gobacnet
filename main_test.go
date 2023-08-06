@@ -3,15 +3,15 @@ package bacnet
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes"
-	"github.com/NubeDev/bacnet/datalink"
-	"github.com/NubeDev/bacnet/encoding"
+	"github.com/BeatTime/bacnet/btypes"
+	"github.com/BeatTime/bacnet/datalink"
+	"github.com/BeatTime/bacnet/encoding"
 	"log"
 	"testing"
 )
 
 const interfaceName = "eth0"
-const testServer = 1234
+const testServer = -1
 
 // TestMain are general test
 func TestUdpDataLink(t *testing.T) {
@@ -33,8 +33,9 @@ func TestMac(t *testing.T) {
 }
 
 func TestServices(t *testing.T) {
-	c, _ := NewClient(&ClientBuilder{Interface: interfaceName})
+	c, _ := NewClient(&ClientBuilder{Interface: "以太网"})
 	defer c.Close()
+	go c.ClientRun()
 
 	t.Run("Read Property", func(t *testing.T) {
 		testReadPropertyService(c, t)
@@ -51,13 +52,6 @@ func TestServices(t *testing.T) {
 }
 
 func testReadPropertyService(c Client, t *testing.T) {
-	wh := &WhoIsOpts{
-		GlobalBroadcast: false,
-		NetworkNumber:   0,
-	}
-	wh.Low = testServer
-	wh.High = testServer
-	dev, err := c.WhoIs(wh)
 	read := btypes.PropertyData{
 		Object: btypes.Object{
 			ID: btypes.ObjectID{
@@ -66,17 +60,31 @@ func testReadPropertyService(c Client, t *testing.T) {
 			},
 			Properties: []btypes.Property{
 				btypes.Property{
-					Type:       btypes.PropObjectName, // Present value
+					Type:       btypes.PropDescription, // Present value
 					ArrayIndex: ArrayAll,
 				},
 			},
 		},
 	}
-	if len(dev) == 0 {
-		t.Fatalf("Unable to find device id %d", testServer)
+
+	mac := make([]byte, 6)
+	fmt.Sscanf("192.168.0.197", "%d.%d.%d.%d", &mac[0], &mac[1], &mac[2], &mac[3])
+	port := uint16(47808)
+	mac[4] = byte(port >> 8)
+	mac[5] = byte(port & 0x00FF)
+	remoteDev := btypes.Device{
+		Addr: btypes.Address{
+			MacLen: 6,
+			Mac:    mac,
+		},
 	}
 
-	resp, err := c.ReadProperty(dev[0], read)
+	objects, err2 := c.Objects(remoteDev)
+	if err2 != nil {
+		t.Fatal(err2)
+	}
+	t.Logf("%v", objects)
+	resp, err := c.ReadProperty(remoteDev, read)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -85,7 +93,7 @@ func testReadPropertyService(c Client, t *testing.T) {
 
 func testWhoIs(c Client, t *testing.T) {
 	wh := &WhoIsOpts{
-		GlobalBroadcast: false,
+		GlobalBroadcast: true,
 		NetworkNumber:   0,
 	}
 	wh.Low = testServer - 1

@@ -2,11 +2,11 @@ package network
 
 import (
 	"errors"
-	"github.com/NubeDev/bacnet"
-	"github.com/NubeDev/bacnet/btypes"
-	"github.com/NubeDev/bacnet/btypes/priority"
-	"github.com/NubeDev/bacnet/btypes/units"
-	"github.com/NubeDev/bacnet/helpers/data"
+	"github.com/BeatTime/bacnet"
+	"github.com/BeatTime/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes/priority"
+	"github.com/BeatTime/bacnet/btypes/units"
+	"github.com/BeatTime/bacnet/helpers/data"
 )
 
 type Point struct {

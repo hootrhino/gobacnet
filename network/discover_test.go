@@ -2,9 +2,9 @@ package network
 
 import (
 	"fmt"
-	pprint "github.com/NubeDev/bacnet/helpers/print"
+	pprint "github.com/BeatTime/bacnet/helpers/print"
 
-	//"github.com/NubeDev/bacnet"
+	//"github.com/BeatTime/bacnet"
 
 	"testing"
 )

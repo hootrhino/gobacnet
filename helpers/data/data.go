@@ -2,7 +2,7 @@ package data
 
 import (
 	"fmt"
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 func ToBitString(d btypes.PropertyData) (ok bool, out *btypes.BitString) {

@@ -3,7 +3,7 @@ package encoding
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 var EncodingEndian binary.ByteOrder = binary.BigEndian

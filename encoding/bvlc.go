@@ -1,7 +1,7 @@
 package encoding
 
 import (
-	"github.com/NubeDev/bacnet/btypes"
+	"github.com/BeatTime/bacnet/btypes"
 )
 
 // Bacnet Virtual Layer Control
