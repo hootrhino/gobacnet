@@ -2,6 +2,10 @@ package bacnet
 
 import (
 	"fmt"
+	"io"
+	"sync"
+	"time"
+
 	"github.com/BeatTime/bacnet/btypes"
 	"github.com/BeatTime/bacnet/btypes/ndpu"
 	"github.com/BeatTime/bacnet/datalink"
@@ -9,10 +13,7 @@ import (
 	"github.com/BeatTime/bacnet/helpers/validation"
 	"github.com/BeatTime/bacnet/tsm"
 	"github.com/BeatTime/bacnet/utsm"
-	log "github.com/sirupsen/logrus"
-	"io"
-	"sync"
-	"time"
+	"github.com/sirupsen/logrus"
 )
 
 const mtuHeaderLength = 4
@@ -32,6 +33,8 @@ type Client interface {
 	ReadMultiProperty(dev btypes.Device, rp btypes.MultiplePropertyData) (btypes.MultiplePropertyData, error)
 	WriteProperty(dest btypes.Device, wp btypes.PropertyData) error
 	WriteMultiProperty(dev btypes.Device, wp btypes.MultiplePropertyData) error
+	SetLogger(*logrus.Logger) error
+	GetLogger() *logrus.Logger
 }
 
 type client struct {
@@ -39,7 +42,7 @@ type client struct {
 	tsm            *tsm.TSM
 	utsm           *utsm.Manager
 	readBufferPool sync.Pool
-	log            *log.Logger
+	log            *logrus.Logger
 }
 
 type ClientBuilder struct {
@@ -53,6 +56,10 @@ type ClientBuilder struct {
 
 // NewClient creates a new client with the given interface and
 func NewClient(cb *ClientBuilder) (Client, error) {
+	defaultLogger := logrus.New()
+	defaultLogger.Formatter = &logrus.JSONFormatter{}
+	defaultLogger.SetLevel(logrus.InfoLevel)
+
 	var err error
 	var dataLink datalink.DataLink
 	iface := cb.Interface
@@ -62,7 +69,7 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	//check ip
 	ok := validation.ValidIP(ip)
 	if !ok {
-
+		defaultLogger.Fatalf("Invalid IP:%v", ip)
 	}
 	//check port
 	if port == 0 {
@@ -70,7 +77,7 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	}
 	ok = validation.ValidPort(port)
 	if !ok {
-
+		defaultLogger.Fatalf("Invalid port:%v", port)
 	}
 	//check adpu
 	if maxPDU == 0 {
@@ -80,24 +87,20 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	if iface != "" {
 		dataLink, err = datalink.NewUDPDataLink(iface, port)
 		if err != nil {
-			//log.Fatal(err)
+			defaultLogger.Fatal(err)
 		}
 	} else {
 		//check subnet
 		sub := cb.SubnetCIDR
 		ok = validation.ValidCIDR(ip, sub)
 		if !ok {
-
+			defaultLogger.Fatal(err)
 		}
 		dataLink, err = datalink.NewUDPDataLinkFromIP(ip, sub, port)
 		if err != nil {
-			//log.Fatal(err)
+			defaultLogger.Fatal(err)
 		}
 	}
-
-	l := log.New()
-	l.Formatter = &log.TextFormatter{}
-	l.SetLevel(log.DebugLevel)
 
 	cli := &client{
 		dataLink: dataLink,
@@ -109,7 +112,7 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 		readBufferPool: sync.Pool{New: func() interface{} {
 			return make([]byte, maxPDU)
 		}},
-		log: l,
+		log: defaultLogger,
 	}
 	return cli, err
 }
@@ -178,11 +181,11 @@ func (c *client) handleMsg(src *btypes.Address, b []byte) {
 
 				if npdu.Source != nil {
 					if npdu.Source.Net > 0 { // add in device network number
-						log.Println("device-network-address", npdu.Source.Net)
+						c.log.Debug("device-network-address", npdu.Source.Net)
 						iam.Addr.Net = npdu.Source.Net
 					}
 					if len(npdu.Source.Adr) > 0 { // add in hardware mac
-						log.Println("device-mstp-mac-address", npdu.Source.Adr)
+						c.log.Debug("device-mstp-mac-address", npdu.Source.Adr)
 						iam.Addr.Adr = npdu.Source.Adr
 					}
 				}
@@ -227,7 +230,7 @@ func (c *client) handleMsg(src *btypes.Address, b []byte) {
 			}
 		default:
 			// Ignore it
-			log.WithFields(log.Fields{"raw": b}).Debug("An ignored packet went through")
+			c.log.WithFields(logrus.Fields{"raw": b}).Debug("An ignored packet went through")
 		}
 	}
 
@@ -236,7 +239,7 @@ func (c *client) handleMsg(src *btypes.Address, b []byte) {
 		// we will need to check it for any additional information we can gleam.
 		// NDPU has source
 		b = b[forwardHeaderLength:]
-		c.log.Debug("Ignored NDPU Forwarded")
+		c.log.Debugf("Ignored NDPU Forwarded:%v", b)
 	}
 }
 
@@ -298,4 +301,15 @@ func (c *client) Close() error {
 	}
 
 	return nil
+}
+
+// inject logger
+func (c *client) SetLogger(logger *logrus.Logger) error {
+	c.log = logger
+	return nil
+}
+
+// inject logger
+func (c *client) GetLogger() *logrus.Logger {
+	return c.log
 }
