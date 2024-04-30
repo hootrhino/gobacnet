@@ -1,6 +1,7 @@
 package bacnet
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"sync"
@@ -56,9 +57,9 @@ type ClientBuilder struct {
 
 // NewClient creates a new client with the given interface and
 func NewClient(cb *ClientBuilder) (Client, error) {
-	defaultLogger := logrus.New()
-	defaultLogger.Formatter = &logrus.JSONFormatter{}
-	defaultLogger.SetLevel(logrus.InfoLevel)
+	logger := logrus.New()
+	logger.Formatter = &logrus.JSONFormatter{}
+	logger.SetLevel(logrus.InfoLevel)
 
 	var err error
 	var dataLink datalink.DataLink
@@ -69,7 +70,7 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	//check ip
 	ok := validation.ValidIP(ip)
 	if !ok {
-		defaultLogger.Fatalf("Invalid IP:%v", ip)
+		return nil, errors.New("invalid Ip")
 	}
 	//check port
 	if port == 0 {
@@ -77,7 +78,7 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	}
 	ok = validation.ValidPort(port)
 	if !ok {
-		defaultLogger.Fatalf("Invalid port:%v", port)
+		return nil, errors.New("invalid port")
 	}
 	//check adpu
 	if maxPDU == 0 {
@@ -87,18 +88,18 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	if iface != "" {
 		dataLink, err = datalink.NewUDPDataLink(iface, port)
 		if err != nil {
-			defaultLogger.Fatal(err)
+			return nil, err
 		}
 	} else {
 		//check subnet
 		sub := cb.SubnetCIDR
 		ok = validation.ValidCIDR(ip, sub)
 		if !ok {
-			defaultLogger.Fatal(err)
+			return nil, errors.New("validate CIDR failed")
 		}
 		dataLink, err = datalink.NewUDPDataLinkFromIP(ip, sub, port)
 		if err != nil {
-			defaultLogger.Fatal(err)
+			return nil, err
 		}
 	}
 
@@ -112,9 +113,9 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 		readBufferPool: sync.Pool{New: func() interface{} {
 			return make([]byte, maxPDU)
 		}},
-		log: defaultLogger,
+		log: logger,
 	}
-	return cli, err
+	return cli, nil
 }
 
 func (c *client) ClientRun() {

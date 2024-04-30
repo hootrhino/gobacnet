@@ -50,7 +50,7 @@ func readProp(cmd *cobra.Command, args []string) {
 		fmt.Println("ERR-client", err)
 		return
 	}
-	defer localDevice.NetworkClose()
+	defer localDevice.NetworkClose(false)
 	go localDevice.NetworkRun()
 
 	device, err := network.NewDevice(localDevice, &network.Device{Ip: deviceIP, DeviceID: deviceID, NetworkNumber: networkNumber, MacMSTP: deviceHardwareMac, MaxApdu: uint32(maxADPU), Segmentation: uint32(segmentation)})
