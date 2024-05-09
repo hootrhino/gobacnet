@@ -29,7 +29,7 @@ func New(net *Network) (*Network, error) {
 		return nil, err
 	}
 	net.bacnet = bc
-	if net.Store.BacStore != nil {
+	if net.Store != nil && net.Store.BacStore != nil {
 		net.Store.BacStore.Set(net.StoreID, net, -1)
 	} else {
 		return nil, errors.New("failed to set bacnet store, bacnet store is empty")

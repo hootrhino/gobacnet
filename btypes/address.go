@@ -27,7 +27,8 @@ func (a *Address) IsBroadcast() bool {
 //SetLength if device is of type ms-tp then set address len to 1
 func (a *Address) SetLength() {
 	if len(a.Adr) > 0 {
-		a.Len = 1
+		// 兼容bacnet device simulator的adr地址长度不为1的情况
+		a.Len = uint8(len(a.Adr))
 	}
 	return
 }

@@ -67,16 +67,11 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	ip := cb.Ip
 	port := cb.Port
 	maxPDU := cb.MaxPDU
-	//check ip
-	ok := validation.ValidIP(ip)
-	if !ok {
-		return nil, errors.New("invalid Ip")
-	}
 	//check port
 	if port == 0 {
 		port = datalink.DefaultPort
 	}
-	ok = validation.ValidPort(port)
+	ok := validation.ValidPort(port)
 	if !ok {
 		return nil, errors.New("invalid port")
 	}
@@ -91,6 +86,11 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 			return nil, err
 		}
 	} else {
+		//check ip
+		ok = validation.ValidIP(ip)
+		if !ok {
+			return nil, errors.New("invalid Ip")
+		}
 		//check subnet
 		sub := cb.SubnetCIDR
 		ok = validation.ValidCIDR(ip, sub)
@@ -188,6 +188,7 @@ func (c *client) handleMsg(src *btypes.Address, b []byte) {
 					if len(npdu.Source.Adr) > 0 { // add in hardware mac
 						c.log.Debug("device-mstp-mac-address", npdu.Source.Adr)
 						iam.Addr.Adr = npdu.Source.Adr
+						iam.Addr.Len = uint8(len(iam.Addr.Adr))
 					}
 				}
 				if err != nil {
