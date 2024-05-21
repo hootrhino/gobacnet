@@ -76,7 +76,7 @@ func dataLink(ipAddr string, port int) (DataLink, error) {
 		broadcast[i] = ipNet.IP[i] | ^ipNet.Mask[i]
 	}
 
-	udp, _ := net.ResolveUDPAddr("udp4", fmt.Sprintf(":%d", port))
+	udp, _ := net.ResolveUDPAddr("udp4", fmt.Sprintf("%s:%d", ipAddr, port))
 	conn, err := net.ListenUDP("udp", udp)
 	udpAddr := conn.LocalAddr().(*net.UDPAddr)
 	port = udpAddr.Port
