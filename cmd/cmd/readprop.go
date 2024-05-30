@@ -5,11 +5,11 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/btypes/services"
-	pprint "github.com/BeatTime/bacnet/helpers/print"
-	"github.com/BeatTime/bacnet/network"
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes/services"
+	pprint "github.com/hootrhino/bacnet/helpers/print"
+	"github.com/hootrhino/bacnet/network"
 	"github.com/spf13/cobra"
 )
 

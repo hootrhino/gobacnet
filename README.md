@@ -1,6 +1,26 @@
-# bacnet
+# Bacnet Stack Simple Implements
 
-bacnet client written in go.
+简单的Bacnet协议实现，主要实现了一些采集功能和基础路由转发功能。
+
+## 进度
+
+- [x] AI类型的数据点位采集
+- [ ] 其他类型的数据点位采集
+
+
+| ObjectType | 英文名称         | 中文名称   |
+| ---------- | ---------------- | ---------- |
+| AI         | AnalogInput      | 模拟输入   |
+| AO         | AnalogOutput     | 模拟输出   |
+| AV         | AnalogValue      | 模拟值     |
+| BI         | BinaryInput      | 二进制输入 |
+| BO         | BinaryOutput     | 二进制输出 |
+| BV         | BinaryValue      | 二进制值   |
+| MI         | MultiStateInput  | 多状态输入 |
+| MO         | MultiStateOutput | 多状态输出 |
+| MV         | MultiStateValue  | 多状态值   |
+
+> **注意:** 目前因为比较紧张的需求，所有实现的功能以需求驱动，并不是完整的bacnet。后续逐步迭代。
 
 # Installation
 
@@ -57,7 +77,7 @@ go run main.go write --interface=wlp3s0 --device=202 --objectID=1 --objectType=1
 - bacnet mstp(rs485) mac address (between 0-255): 1
 
 ```
-go run main.go read --interface=wlp3s0 --device=202 --address=192.168.15.20 --network=4 --mstp=1 --objectID=1 --objectType=1 --property=85 
+go run main.go read --interface=wlp3s0 --device=202 --address=192.168.15.20 --network=4 --mstp=1 --objectID=1 --objectType=1 --property=85
 ```
 
 get device name
@@ -149,7 +169,8 @@ This library is heavily based on the BACnet-Stack library originally written by 
 
 
 
-example whois
+## example
+### whois
 ```go
 	bytes := []byte{
 		0x81, 0x0b, 0x00, 0x08, // BVLC
@@ -181,3 +202,50 @@ example whois
   ```
 
 
+### Server
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand/v2"
+	"time"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/apdus"
+	"github.com/hootrhino/bacnet/btypes"
+)
+
+func main() {
+	// cmd.Execute()
+	client, err := bacnet.NewClient(&bacnet.ClientBuilder{
+		Ip:         "192.168.10.163",
+		Port:       47808,
+		SubnetCIDR: 24,
+		DeviceId:   10,
+		VendorId:   10,
+		NetWorkId:  10,
+		PropertyData: map[uint32][2]btypes.Object{
+			1: apdus.NewAIPropertyWithRequiredFields("temp", 1, float32(3.14), "empty"),
+			2: apdus.NewAIPropertyWithRequiredFields("humi", 2, float32(77.67), "empty"),
+			3: apdus.NewAIPropertyWithRequiredFields("pres", 3, float32(101.11), "empty"),
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("client run success")
+	go func() {
+		for {
+			for i := 1; i <= 3; i++ {
+				newValue := rand.Float32()
+				client.GetBacnetIPServer().UpdateAIPropertyValue(uint32(i), newValue)
+				fmt.Println("Update Value: ", i, ", ", newValue)
+			}
+			time.Sleep(3 * time.Second)
+		}
+	}()
+	client.ClientRun()
+}
+
+```

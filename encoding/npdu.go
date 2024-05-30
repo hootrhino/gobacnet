@@ -1,8 +1,8 @@
 package encoding
 
 import (
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/btypes/ndpu"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes/ndpu"
 )
 
 //https://github.com/bacnet-stack/bacnet-stack/blob/master/src/bacnet/npdu.c#L391

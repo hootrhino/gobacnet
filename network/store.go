@@ -2,9 +2,10 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/helpers/store"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/helpers/store"
 	"github.com/pkg/errors"
 )
 
@@ -21,7 +22,7 @@ func NewStore() *Store {
 	return s
 }
 
-//NewNetwork updated a cached
+// NewNetwork updated a cached
 func (store *Store) NewNetwork(storeID, iface, ip string, port, subnet int) error {
 	cb := &bacnet.ClientBuilder{
 		Interface:  iface,
@@ -55,7 +56,7 @@ func (store *Store) GetNetwork(uuid string) (*Network, error) {
 	return parse, nil
 }
 
-//UpdateDevice updated a cached device
+// UpdateDevice updated a cached device
 func (store *Store) UpdateDevice(storeID string, net *Network, device *Device) error {
 	var err error
 	dev := &btypes.Device{

@@ -3,10 +3,11 @@ package bacnet
 import (
 	"context"
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
 	"time"
 
-	"github.com/BeatTime/bacnet/encoding"
+	"github.com/hootrhino/bacnet/btypes"
+
+	"github.com/hootrhino/bacnet/encoding"
 )
 
 const maxReattempt = 2

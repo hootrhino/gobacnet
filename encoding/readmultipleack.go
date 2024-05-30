@@ -2,9 +2,25 @@ package encoding
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
+	"math"
+
+	"github.com/hootrhino/bacnet/btypes"
 )
 
+func (e *Encoder) PackageReadMultiplePropertyAck(invokeID uint8, data btypes.MultiplePropertyData) error {
+	a := btypes.APDU{
+		DataType: btypes.ComplexAck,
+		Service:  btypes.ServiceConfirmedReadPropMultiple,
+		InvokeId: invokeID,
+	}
+	e.APDU(a)
+	err := e.objectsWithData(data.Objects)
+	if err != nil {
+		return err
+	}
+
+	return e.Error()
+}
 func (e *Encoder) ReadMultiplePropertyAck(invokeID uint8, data btypes.MultiplePropertyData) error {
 	a := btypes.APDU{
 		DataType: btypes.ComplexAck,
@@ -43,21 +59,92 @@ func (e *Encoder) propertiesWithData(properties []btypes.Property) error {
 		// Tag 2 - Property ID
 		tag = 2
 		e.contextEnumerated(tag, uint32(prop.Type))
-
-		// Tag 3 (OPTIONAL) - Array Length
 		tag++
-		if prop.ArrayIndex != ArrayAll {
-			e.contextUnsigned(tag, prop.ArrayIndex)
-		}
-
 		// Tag 4 Opening Tag
 		tag++
 		openedTag := tag
 		e.openingTag(openedTag)
-		e.write(prop.Data)
+		// {
+		if prop.Type == btypes.PROP_OBJECT_NAME ||
+			prop.Type == btypes.PROP_TAGS ||
+			prop.Type == btypes.PROP_PROFILE_LOCATION ||
+			prop.Type == btypes.PROP_PROFILE_NAME ||
+			prop.Type == btypes.PROP_DESCRIPTION {
+			switch T := prop.Data.(type) {
+			case string:
+				e.write(uint8(0x75))       // 扩展字符串
+				e.write(uint8(len(T) + 1)) // 几个字符
+				e.write(uint8(0x00))       // + 字符集:UTF8
+				for _, c := range T {
+					e.write(uint8(c)) // B
+				}
+			default:
+				panic(fmt.Errorf(" Unsupported Type: %v", T))
+			}
+		}
+		// ID 是4个字节（26位）
+		if prop.Type == btypes.PROP_OBJECT_IDENTIFIER {
+			switch T := prop.Data.(type) {
+			case uint32:
+				e.write(uint8(0xC4))
+				e.write(T)
+			default:
+				panic(fmt.Errorf(" Unsupported Type: %v", T))
+			}
+		}
+		if prop.Type == btypes.PROP_PRESENT_VALUE {
+			switch T := prop.Data.(type) {
+			case float32: //0x44 : Real
+				e.write(uint8(0x44))
+				// 要对Float做算法处理
+				e.write(math.Float32bits(T))
+			case uint32:
+				e.write(uint8(0x44))
+				e.write(T)
+			case bool:
+				e.write(uint8(0x44))
+				e.write(T)
+			case uint16:
+				e.write(uint8(0x44))
+				e.write(T)
+			default:
+				panic(fmt.Errorf(" Unsupported Type: %v", T))
+			}
+		}
+
+		// status-flags: (Bit String) (FFFF)
+		// bit string : // 82 04 00
+		// 固定写死
+		if prop.Type == btypes.PROP_STATUS_FLAGS {
+			e.write(uint8(0x82))
+			e.write(uint8(0x04))
+			e.write(uint8(0x00))
+		}
+		// event-state:  normal (0)
+		// 固定写死
+		if prop.Type == btypes.PROP_EVENT_STATE {
+			e.write(uint8(0x91))
+			e.write(uint8(0x00))
+		}
+		// out-of-service: FALSE
+		//  固定写死
+		if prop.Type == btypes.PROP_OUT_OF_SERVICE {
+			e.write(uint8(0x10))
+		}
+		// Property Identifier: units (117)
+		// 固定写死
+		if prop.Type == btypes.PropUnits {
+			switch T := prop.Data.(type) {
+			case uint16:
+				e.write(uint8(0x91))
+				e.write(uint8(0x5F))
+			default:
+				panic(fmt.Errorf(" Unsupported Type: %v", T))
+			}
+		}
+		// }
 		e.closingTag(openedTag)
 
-		e.write(prop.Data)
 	}
 	return e.Error()
 }

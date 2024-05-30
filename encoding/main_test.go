@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/BeatTime/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 const compareErrFmt = "Mismatch in %s when decoding values. Expected: %d, received: %d"

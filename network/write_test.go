@@ -2,8 +2,9 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
 	"testing"
+
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 func TestDevice_Write(t *testing.T) {

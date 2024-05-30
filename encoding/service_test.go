@@ -2,13 +2,14 @@ package encoding
 
 import (
 	"encoding/json"
-	pprint "github.com/BeatTime/bacnet/helpers/print"
 	"log"
 	"reflect"
 	"strings"
 	"testing"
 
-	"github.com/BeatTime/bacnet/btypes"
+	pprint "github.com/hootrhino/bacnet/helpers/print"
+
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 func TestReadPropertyService(t *testing.T) {
@@ -180,27 +181,27 @@ func TestRealDataIAm(t *testing.T) {
 }
 
 /*
-func TestIAm(t *testing.T) {
-	ids := []btypes.ObjectID{
-		btypes.ObjectID{Instance: 1, Type: 5},
-		btypes.ObjectID{Instance: 99, Type: 6},
-		btypes.ObjectID{Instance: 133, Type: 1},
-	}
-	enc := NewEncoder()
-	err := enc.IAm(ids)
-	if err != nil {
-		t.Fatal(err)
-	}
+	func TestIAm(t *testing.T) {
+		ids := []btypes.ObjectID{
+			btypes.ObjectID{Instance: 1, Type: 5},
+			btypes.ObjectID{Instance: 99, Type: 6},
+			btypes.ObjectID{Instance: 133, Type: 1},
+		}
+		enc := NewEncoder()
+		err := enc.IAm(ids)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	dec := NewDecoder(enc.Bytes())
+		dec := NewDecoder(enc.Bytes())
 
-	decIds := make([]btypes.ObjectID, len(ids))
-	err = dec.IAm(decIds[:])
+		decIds := make([]btypes.ObjectID, len(ids))
+		err = dec.IAm(decIds[:])
 
-	equal := reflect.DeepEqual(ids, decIds)
-	if !equal {
-		t.Errorf("Encoding/Decoding Failed: %v does not equal %v", ids, decIds)
-	}
+		equal := reflect.DeepEqual(ids, decIds)
+		if !equal {
+			t.Errorf("Encoding/Decoding Failed: %v does not equal %v", ids, decIds)
+		}
 
 }
 */

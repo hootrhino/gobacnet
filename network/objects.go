@@ -2,13 +2,14 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/helpers/data"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/helpers/data"
 	log "github.com/sirupsen/logrus"
 )
 
-//DeviceObjects get device objects
+// DeviceObjects get device objects
 func (device *Device) DeviceObjects(deviceID btypes.ObjectInstance, checkAPDU bool) (objectList []btypes.ObjectID, err error) {
 	if checkAPDU { //check set the maxADPU and Segmentation
 		whoIs, err := device.Whois(&bacnet.WhoIsOpts{
@@ -54,8 +55,8 @@ func (device *Device) DeviceObjects(deviceID btypes.ObjectInstance, checkAPDU bo
 	return objectList, nil
 }
 
-//DeviceObjectsBuilder this is used when a device can't send the object list in the fully ArrayIndex
-//it first reads the size of the object list and then loops the list to build an object list
+// DeviceObjectsBuilder this is used when a device can't send the object list in the fully ArrayIndex
+// it first reads the size of the object list and then loops the list to build an object list
 func (device *Device) deviceObjectsBuilder(deviceID btypes.ObjectInstance) (objectList []btypes.ObjectID, err error) {
 	//get object list
 	obj := &Object{

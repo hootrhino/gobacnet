@@ -2,8 +2,9 @@ package btypes
 
 import (
 	"fmt"
-	ip2bytes "github.com/BeatTime/bacnet/helpers/ipbytes"
-	"github.com/BeatTime/bacnet/helpers/validation"
+
+	ip2bytes "github.com/hootrhino/bacnet/helpers/ipbytes"
+	"github.com/hootrhino/bacnet/helpers/validation"
 )
 
 type Enumerated uint32
@@ -107,7 +108,7 @@ func (dev *Device) ObjectSlice() []Object {
 	return objs
 }
 
-//CheckADPU device max ADPU len (mstp can be > 480, and IP > 1476)
+// CheckADPU device max ADPU len (mstp can be > 480, and IP > 1476)
 func (dev *Device) CheckADPU() error {
 	errMsg := "device.CheckADPU() incorrect ADPU size:"
 	size := dev.MaxApdu

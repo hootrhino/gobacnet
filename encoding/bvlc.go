@@ -1,7 +1,7 @@
 package encoding
 
 import (
-	"github.com/BeatTime/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 // Bacnet Virtual Layer Control

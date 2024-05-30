@@ -2,10 +2,11 @@ package cmd2
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/spf13/cobra"
 	"log"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/spf13/cobra"
 )
 
 // readMultiCmd represents the readMultiCmd command

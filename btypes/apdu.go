@@ -2,7 +2,8 @@ package btypes
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes/bacerr"
+
+	"github.com/hootrhino/bacnet/btypes/bacerr"
 )
 
 /*

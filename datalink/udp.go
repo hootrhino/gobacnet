@@ -2,9 +2,10 @@ package datalink
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
 	"net"
 	"strings"
+
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 // DefaultPort that BacnetIP will use if a port is not given. Valid ports for
@@ -113,9 +114,21 @@ func (c *udpDataLink) Receive(data []byte) (*btypes.Address, int, error) {
 	udpAddr := UDPToAddress(adr)
 	return udpAddr, n, nil
 }
+func (c *udpDataLink) ReceiveFrom(data []byte) (*btypes.Address, *net.UDPAddr, int, error) {
+	n, udpFromAddr, err := c.listener.ReadFromUDP(data)
+	if err != nil {
+		return nil, udpFromAddr, n, err
+	}
+	udpFromAddr.IP = udpFromAddr.IP.To4()
+	NpduAddr := UDPToAddress(udpFromAddr)
+	return NpduAddr, udpFromAddr, n, nil
+}
 
 func (c *udpDataLink) GetMyAddress() *btypes.Address {
 	return c.myAddress
+}
+func (c *udpDataLink) GetListener() *net.UDPConn {
+	return c.listener
 }
 
 // GetBroadcastAddress uses the given address with subnet to return the broadcast address

@@ -2,9 +2,10 @@ package bacnet
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/btypes/ndpu"
-	"github.com/BeatTime/bacnet/encoding"
+
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes/ndpu"
+	"github.com/hootrhino/bacnet/encoding"
 )
 
 /*

@@ -2,10 +2,11 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	pprint "github.com/BeatTime/bacnet/helpers/print"
-	"github.com/kr/pretty"
 	"testing"
+
+	"github.com/hootrhino/bacnet"
+	pprint "github.com/hootrhino/bacnet/helpers/print"
+	"github.com/kr/pretty"
 )
 
 func TestNetwork_Whois(t *testing.T) {
