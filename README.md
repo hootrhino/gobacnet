@@ -1,6 +1,26 @@
-# bacnet
+# Bacnet Stack Simple Implements
 
-bacnet client written in go.
+简单的Bacnet协议实现，主要实现了一些采集功能和基础路由转发功能。
+
+## 进度
+
+- [x] AI类型的数据点位采集
+- [ ] 其他类型的数据点位采集
+
+
+| ObjectType | 英文名称         | 中文名称   |
+| ---------- | ---------------- | ---------- |
+| AI         | AnalogInput      | 模拟输入   |
+| AO         | AnalogOutput     | 模拟输出   |
+| AV         | AnalogValue      | 模拟值     |
+| BI         | BinaryInput      | 二进制输入 |
+| BO         | BinaryOutput     | 二进制输出 |
+| BV         | BinaryValue      | 二进制值   |
+| MI         | MultiStateInput  | 多状态输入 |
+| MO         | MultiStateOutput | 多状态输出 |
+| MV         | MultiStateValue  | 多状态值   |
+
+> **注意:** 目前因为比较紧张的需求，所有实现的功能以需求驱动，并不是完整的bacnet。后续逐步迭代。
 
 # Installation
 
