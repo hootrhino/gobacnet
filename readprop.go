@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/encoding"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/encoding"
 )
 
 // ReadProperty reads a single property from a single object in the given device.

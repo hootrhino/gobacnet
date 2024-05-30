@@ -3,9 +3,9 @@ package bacnet
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/btypes/ndpu"
-	"github.com/hootrhino/bacnet/encoding"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes/ndpu"
+	"github.com/hootrhino/gobacnet/encoding"
 )
 
 /*

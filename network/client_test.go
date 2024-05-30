@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
-	segmentation2 "github.com/hootrhino/bacnet/btypes/segmentation"
+	"github.com/hootrhino/gobacnet/btypes"
+	segmentation2 "github.com/hootrhino/gobacnet/btypes/segmentation"
 
-	//"github.com/hootrhino/bacnet"
+	//"github.com/hootrhino/gobacnet"
 
 	"testing"
 )

@@ -3,7 +3,7 @@ package encoding
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 func isValidObjectType(idType btypes.ObjectType) error {

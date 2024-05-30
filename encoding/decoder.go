@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 // Decoder used

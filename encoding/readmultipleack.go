@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 func (e *Encoder) PackageReadMultiplePropertyAck(invokeID uint8, data btypes.MultiplePropertyData) error {

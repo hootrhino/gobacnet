@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hootrhino/bacnet/btypes"
-	pprint "github.com/hootrhino/bacnet/helpers/print"
+	"github.com/hootrhino/gobacnet/btypes"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
 )
 
 func TestPointDetails(t *testing.T) {

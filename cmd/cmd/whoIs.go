@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/hootrhino/bacnet"
-	pprint "github.com/hootrhino/bacnet/helpers/print"
-	"github.com/hootrhino/bacnet/network"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
+	"github.com/hootrhino/gobacnet/network"
 	"github.com/spf13/cobra"
 )
 

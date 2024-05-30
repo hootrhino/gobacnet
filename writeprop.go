@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/encoding"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/encoding"
 )
 
 func (c *client) WriteProperty(device btypes.Device, wp btypes.PropertyData) error {

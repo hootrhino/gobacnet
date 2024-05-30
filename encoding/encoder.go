@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/hootrhino/bacnet/apdus"
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/apdus"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 var EncodingEndian binary.ByteOrder = binary.BigEndian

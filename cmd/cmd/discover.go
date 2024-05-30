@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

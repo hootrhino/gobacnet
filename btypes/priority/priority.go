@@ -3,9 +3,9 @@ package priority
 import (
 	"reflect"
 
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/helpers/data"
-	"github.com/hootrhino/bacnet/helpers/nils"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/helpers/data"
+	"github.com/hootrhino/gobacnet/helpers/nils"
 )
 
 func BuildFloat32(in btypes.PropertyData, objType btypes.ObjectType) (pri *Float32) {

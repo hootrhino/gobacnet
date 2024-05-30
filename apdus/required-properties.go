@@ -15,7 +15,7 @@
 
 package apdus
 
-import "github.com/hootrhino/bacnet/btypes"
+import "github.com/hootrhino/gobacnet/btypes"
 
 // Analog Input Object:
 //

@@ -15,9 +15,9 @@
 
 package apdus
 
-import "github.com/hootrhino/bacnet/btypes"
+import "github.com/hootrhino/gobacnet/btypes"
 
-// 返回列表	
+// 返回列表
 // Analog Input Object:
 //     Object_Name: A character string that identifies the analog input.
 //     Object_Identifier:

@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/helpers/data"
-	ip2bytes "github.com/hootrhino/bacnet/helpers/ipbytes"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/helpers/data"
+	ip2bytes "github.com/hootrhino/gobacnet/helpers/ipbytes"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	pprint "github.com/hootrhino/bacnet/helpers/print"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
 )
 
 func TestSupported(t *testing.T) {

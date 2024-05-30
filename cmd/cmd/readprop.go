@@ -6,10 +6,10 @@ import (
 	"strconv"
 
 	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/btypes/services"
-	pprint "github.com/hootrhino/bacnet/helpers/print"
-	"github.com/hootrhino/bacnet/network"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes/services"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
+	"github.com/hootrhino/gobacnet/network"
 	"github.com/spf13/cobra"
 )
 

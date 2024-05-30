@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/hootrhino/bacnet"
-	pprint "github.com/hootrhino/bacnet/helpers/print"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
 	"github.com/kr/pretty"
 )
 

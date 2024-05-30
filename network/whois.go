@@ -2,8 +2,8 @@ package network
 
 import (
 	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/helpers/data"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/helpers/data"
 	log "github.com/sirupsen/logrus"
 )
 

@@ -2,8 +2,8 @@ package bacnet
 
 import "C"
 import (
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/encoding"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/encoding"
 )
 
 type WhoIsOpts struct {

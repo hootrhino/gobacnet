@@ -1,6 +1,6 @@
 package btypes
 
-import "github.com/hootrhino/bacnet/btypes/ndpu"
+import "github.com/hootrhino/gobacnet/btypes/ndpu"
 
 type NPDUPriority byte
 

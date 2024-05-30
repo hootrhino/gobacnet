@@ -3,7 +3,7 @@ package datalink
 import (
 	"net"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 type DataLink interface {

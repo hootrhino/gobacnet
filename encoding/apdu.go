@@ -3,9 +3,9 @@ package encoding
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet/btypes/bacerr"
+	"github.com/hootrhino/gobacnet/btypes/bacerr"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 func (e *Encoder) APDU(a btypes.APDU) error {

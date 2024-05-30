@@ -3,7 +3,7 @@ package btypes
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet/btypes/bacerr"
+	"github.com/hootrhino/gobacnet/btypes/bacerr"
 )
 
 /*

@@ -1,7 +1,7 @@
 package encoding
 
 import (
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 func (e *Encoder) WhoIs(low, high int32) error {

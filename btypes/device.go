@@ -3,8 +3,8 @@ package btypes
 import (
 	"fmt"
 
-	ip2bytes "github.com/hootrhino/bacnet/helpers/ipbytes"
-	"github.com/hootrhino/bacnet/helpers/validation"
+	ip2bytes "github.com/hootrhino/gobacnet/helpers/ipbytes"
+	"github.com/hootrhino/gobacnet/helpers/validation"
 )
 
 type Enumerated uint32

@@ -2,7 +2,7 @@ package network
 
 import (
 	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 // ReadString to read a string like objectName

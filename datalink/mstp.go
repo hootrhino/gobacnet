@@ -7,7 +7,7 @@ package datalink
 //
 //import (
 //	"fmt"
-//	"github.com/hootrhino/bacnet/btypes"
+//	"github.com/hootrhino/gobacnet/btypes"
 //	"os"
 //	"time"
 //	"unsafe"

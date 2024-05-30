@@ -6,9 +6,9 @@ import (
 	"log"
 	"testing"
 
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/datalink"
-	"github.com/hootrhino/bacnet/encoding"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/datalink"
+	"github.com/hootrhino/gobacnet/encoding"
 )
 
 const interfaceName = "eth0"

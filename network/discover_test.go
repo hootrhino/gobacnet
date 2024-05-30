@@ -3,9 +3,9 @@ package network
 import (
 	"fmt"
 
-	pprint "github.com/hootrhino/bacnet/helpers/print"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
 
-	//"github.com/hootrhino/bacnet"
+	//"github.com/hootrhino/gobacnet"
 
 	"testing"
 )

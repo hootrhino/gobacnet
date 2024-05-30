@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	pprint "github.com/hootrhino/bacnet/helpers/print"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 func TestReadPropertyService(t *testing.T) {

@@ -1,7 +1,7 @@
 package encoding
 
 import (
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 func (e *Encoder) IAm(id btypes.IAm) error {

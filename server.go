@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 // Server Ip模式

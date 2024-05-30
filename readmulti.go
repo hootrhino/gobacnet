@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes"
 
-	"github.com/hootrhino/bacnet/encoding"
+	"github.com/hootrhino/gobacnet/encoding"
 )
 
 const maxReattempt = 2

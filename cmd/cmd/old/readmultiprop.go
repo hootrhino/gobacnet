@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
+	bacnet "github.com/hootrhino/gobacnet"
+	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/spf13/cobra"
 )
 

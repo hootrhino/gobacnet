@@ -4,10 +4,10 @@ import (
 	"errors"
 
 	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/btypes"
-	"github.com/hootrhino/bacnet/btypes/priority"
-	"github.com/hootrhino/bacnet/btypes/units"
-	"github.com/hootrhino/bacnet/helpers/data"
+	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/hootrhino/gobacnet/btypes/priority"
+	"github.com/hootrhino/gobacnet/btypes/units"
+	"github.com/hootrhino/gobacnet/helpers/data"
 )
 
 type Point struct {

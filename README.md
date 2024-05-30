@@ -211,9 +211,9 @@ import (
 	"math/rand/v2"
 	"time"
 
-	"github.com/hootrhino/bacnet"
-	"github.com/hootrhino/bacnet/apdus"
-	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/gobacnet"
+	"github.com/hootrhino/gobacnet/apdus"
+	"github.com/hootrhino/gobacnet/btypes"
 )
 
 func main() {

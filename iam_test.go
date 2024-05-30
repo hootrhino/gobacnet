@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	pprint "github.com/hootrhino/bacnet/helpers/print"
+	pprint "github.com/hootrhino/gobacnet/helpers/print"
 )
 
 var iface = "enp0s31f6"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hootrhino/bacnet/helpers/homedir"
+	"github.com/hootrhino/gobacnet/helpers/homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
