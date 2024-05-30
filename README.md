@@ -57,7 +57,7 @@ go run main.go write --interface=wlp3s0 --device=202 --objectID=1 --objectType=1
 - bacnet mstp(rs485) mac address (between 0-255): 1
 
 ```
-go run main.go read --interface=wlp3s0 --device=202 --address=192.168.15.20 --network=4 --mstp=1 --objectID=1 --objectType=1 --property=85 
+go run main.go read --interface=wlp3s0 --device=202 --address=192.168.15.20 --network=4 --mstp=1 --objectID=1 --objectType=1 --property=85
 ```
 
 get device name
@@ -149,7 +149,8 @@ This library is heavily based on the BACnet-Stack library originally written by 
 
 
 
-example whois
+## example
+### whois
 ```go
 	bytes := []byte{
 		0x81, 0x0b, 0x00, 0x08, // BVLC
@@ -181,3 +182,50 @@ example whois
   ```
 
 
+### Server
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand/v2"
+	"time"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/apdus"
+	"github.com/hootrhino/bacnet/btypes"
+)
+
+func main() {
+	// cmd.Execute()
+	client, err := bacnet.NewClient(&bacnet.ClientBuilder{
+		Ip:         "192.168.10.163",
+		Port:       47808,
+		SubnetCIDR: 24,
+		DeviceId:   10,
+		VendorId:   10,
+		NetWorkId:  10,
+		PropertyData: map[uint32][2]btypes.Object{
+			1: apdus.NewAIPropertyWithRequiredFields("temp", 1, float32(3.14), "empty"),
+			2: apdus.NewAIPropertyWithRequiredFields("humi", 2, float32(77.67), "empty"),
+			3: apdus.NewAIPropertyWithRequiredFields("pres", 3, float32(101.11), "empty"),
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("client run success")
+	go func() {
+		for {
+			for i := 1; i <= 3; i++ {
+				newValue := rand.Float32()
+				client.GetBacnetIPServer().UpdateAIPropertyValue(uint32(i), newValue)
+				fmt.Println("Update Value: ", i, ", ", newValue)
+			}
+			time.Sleep(3 * time.Second)
+		}
+	}()
+	client.ClientRun()
+}
+
+```

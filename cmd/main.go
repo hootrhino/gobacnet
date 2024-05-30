@@ -20,9 +20,9 @@ func main() {
 		VendorId:   10,
 		NetWorkId:  10,
 		PropertyData: map[uint32][2]btypes.Object{
-			1: apdus.NewAIPropertyWithRequiredFields("temp", 1, float32(3.14), "temp des"),
-			2: apdus.NewAIPropertyWithRequiredFields("humi", 2, float32(77.67), "humi des"),
-			3: apdus.NewAIPropertyWithRequiredFields("pres", 3, float32(101.11), "pres des"),
+			1: apdus.NewAIPropertyWithRequiredFields("temp", 1, float32(3.14), "empty"),
+			2: apdus.NewAIPropertyWithRequiredFields("humi", 2, float32(77.67), "empty"),
+			3: apdus.NewAIPropertyWithRequiredFields("pres", 3, float32(101.11), "empty"),
 		},
 	})
 	if err != nil {
