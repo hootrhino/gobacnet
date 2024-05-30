@@ -1,4 +1,4 @@
-module github.com/hootrhino/bacnet
+module github.com/hootrhino/gobacnet
 
 go 1.18
 
