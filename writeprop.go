@@ -3,9 +3,10 @@ package bacnet
 import (
 	"context"
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/encoding"
 	"time"
+
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/encoding"
 )
 
 func (c *client) WriteProperty(device btypes.Device, wp btypes.PropertyData) error {

@@ -2,9 +2,10 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
-	pprint "github.com/BeatTime/bacnet/helpers/print"
 	"testing"
+
+	"github.com/hootrhino/bacnet/btypes"
+	pprint "github.com/hootrhino/bacnet/helpers/print"
 )
 
 func TestPointDetails(t *testing.T) {

@@ -2,11 +2,12 @@ package network
 
 import (
 	"errors"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/btypes/priority"
-	"github.com/BeatTime/bacnet/btypes/units"
-	"github.com/BeatTime/bacnet/helpers/data"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes/priority"
+	"github.com/hootrhino/bacnet/btypes/units"
+	"github.com/hootrhino/bacnet/helpers/data"
 )
 
 type Point struct {
@@ -32,7 +33,7 @@ type PointDetails struct {
 	PointType  string                `json:"point_type,omitempty"`
 }
 
-//PointDetails use this when wanting to read point name, units and so on
+// PointDetails use this when wanting to read point name, units and so on
 func (device *Device) PointDetails(pnt *Point) (resp *PointDetails, err error) {
 	resp = &PointDetails{}
 	obj := &Object{
@@ -65,7 +66,7 @@ func (device *Device) PointDetails(pnt *Point) (resp *PointDetails, err error) {
 ***** READS *****
  */
 
-//PointReadFloat32 use this when wanting to read point values for an AI, AV, AO
+// PointReadFloat32 use this when wanting to read point values for an AI, AV, AO
 func (device *Device) PointReadFloat32(pnt *Point) (float32, error) {
 	if device.isPointFloat(pnt) {
 
@@ -84,7 +85,7 @@ func (device *Device) PointReadFloat32(pnt *Point) (float32, error) {
 	return device.toFloat(read), nil
 }
 
-//PointReadPriority use this when wanting to read point values for an AI, AV, AO
+// PointReadPriority use this when wanting to read point values for an AI, AV, AO
 func (device *Device) PointReadPriority(pnt *Point) (pri *priority.Float32, err error) {
 	if device.isPointWriteable(pnt) {
 
@@ -104,7 +105,7 @@ func (device *Device) PointReadPriority(pnt *Point) (pri *priority.Float32, err 
 	return priority.BuildFloat32(read, pnt.ObjectType), nil
 }
 
-//PointReadBool use this when wanting to read point values for an BI, BV, BO
+// PointReadBool use this when wanting to read point values for an BI, BV, BO
 func (device *Device) PointReadBool(pnt *Point) (uint32, error) {
 	if !device.isPointBool(pnt) {
 
@@ -123,7 +124,7 @@ func (device *Device) PointReadBool(pnt *Point) (uint32, error) {
 	return device.toUint32(read), nil
 }
 
-//PointReadMultiState use this when wanting to read point values for an MI, MV, MO
+// PointReadMultiState use this when wanting to read point values for an MI, MV, MO
 func (device *Device) PointReadMultiState(pnt *Point) (uint32, error) {
 	if !device.isPointBool(pnt) {
 
@@ -142,7 +143,7 @@ func (device *Device) PointReadMultiState(pnt *Point) (uint32, error) {
 	return device.toUint32(read), nil
 }
 
-//PointReleasePriority use this when releasing a priority
+// PointReleasePriority use this when releasing a priority
 func (device *Device) PointReleasePriority(pnt *Point, pri uint8) error {
 	if pnt == nil {
 		return errors.New("invalid point to PointReleasePriority()")
@@ -168,7 +169,7 @@ func (device *Device) PointReleasePriority(pnt *Point, pri uint8) error {
 ***** WRITES *****
  */
 
-//PointWriteAnalogue use this when wanting to write a new value for an AV, AO
+// PointWriteAnalogue use this when wanting to write a new value for an AV, AO
 func (device *Device) PointWriteAnalogue(pnt *Point, value float32) error {
 	if device.isPointFloat(pnt) {
 
@@ -187,7 +188,7 @@ func (device *Device) PointWriteAnalogue(pnt *Point, value float32) error {
 	return nil
 }
 
-//PointWriteBool use this when wanting to write a new value for an BV, AO
+// PointWriteBool use this when wanting to write a new value for an BV, AO
 func (device *Device) PointWriteBool(pnt *Point, value uint32) error {
 	if device.isPointFloat(pnt) {
 
@@ -206,7 +207,7 @@ func (device *Device) PointWriteBool(pnt *Point, value uint32) error {
 	return nil
 }
 
-//PointWriteMultiState use this when wanting to write a new value for an MV, MO
+// PointWriteMultiState use this when wanting to write a new value for an MV, MO
 func (device *Device) PointWriteMultiState(pnt *Point, value uint32) error {
 	if device.isPointFloat(pnt) {
 

@@ -3,7 +3,7 @@ package encoding
 import (
 	"fmt"
 
-	"github.com/BeatTime/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 func (e *Encoder) readPropertyHeader(tagPos uint8, data *btypes.PropertyData) (uint8, error) {
@@ -49,6 +49,7 @@ func (e *Encoder) ReadProperty(invokeID uint8, data btypes.PropertyData) error {
 }
 
 // ReadPropertyAck is the response made to a ReadProperty service request.
+// ReadPropertyAck is the response made to a ReadProperty service request.
 func (e *Encoder) ReadPropertyAck(invokeID uint8, data btypes.PropertyData) error {
 	if len(data.Object.Properties) != 1 {
 		return fmt.Errorf("Property length length must be 1 not %d", len(data.Object.Properties))
@@ -69,10 +70,10 @@ func (e *Encoder) ReadPropertyAck(invokeID uint8, data btypes.PropertyData) erro
 	}
 
 	e.openingTag(tagID)
-	tagID++
 	prop := data.Object.Properties[0]
 	e.AppData(prop.Data, false)
 	e.closingTag(tagID)
+	tagID++
 	return e.Error()
 }
 

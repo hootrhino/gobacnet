@@ -3,7 +3,9 @@ package encoding
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/BeatTime/bacnet/btypes"
+
+	"github.com/hootrhino/bacnet/apdus"
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 var EncodingEndian binary.ByteOrder = binary.BigEndian
@@ -27,6 +29,14 @@ func (e *Encoder) Error() error {
 
 func (e *Encoder) Bytes() []byte {
 	return e.buff.Bytes()
+}
+
+// Packet是重新计算长度后的字节
+func (e *Encoder) Packet() []byte {
+	Len, _ := apdus.IntToBVLCLen(uint16(len(e.Bytes()))) // 计算包长
+	e.Bytes()[2] = Len[0]                                // 填充包长
+	e.Bytes()[3] = Len[1]                                // 填充包长
+	return e.Bytes()
 }
 
 func (e *Encoder) write(p interface{}) {
@@ -55,7 +65,7 @@ func (e *Encoder) closingTag(num uint8) {
 	e.tagNum(meta, num)
 }
 
-//tagNum pre-tags
+// tagNum pre-tags
 func (e *Encoder) tagNum(meta tagMeta, num uint8) {
 	t := uint8(meta)
 	if num <= 14 {
@@ -114,8 +124,11 @@ func (e *Encoder) tag(tg tagInfo) {
 	}
 }
 
-/* from clause 20.2.14 Encoding of an Object Identifier Value
-returns the number of apdu bytes consumed */
+/*
+	from clause 20.2.14 Encoding of an Object Identifier Value
+
+returns the number of apdu bytes consumed
+*/
 func (e *Encoder) objectId(objectType btypes.ObjectType, instance btypes.ObjectInstance) {
 	var value uint32
 	value = ((uint32(objectType) & MaxObject) << InstanceBits) | (uint32(instance) & MaxInstance)

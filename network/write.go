@@ -2,9 +2,10 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/btypes/null"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes/null"
 	log "github.com/sirupsen/logrus"
 )
 

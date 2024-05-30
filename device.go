@@ -4,16 +4,19 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"sync"
 	"time"
 
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/btypes/ndpu"
-	"github.com/BeatTime/bacnet/datalink"
-	"github.com/BeatTime/bacnet/encoding"
-	"github.com/BeatTime/bacnet/helpers/validation"
-	"github.com/BeatTime/bacnet/tsm"
-	"github.com/BeatTime/bacnet/utsm"
+	"github.com/hootrhino/bacnet/apdus"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes/ndpu"
+	"github.com/hootrhino/bacnet/btypes/segmentation"
+	"github.com/hootrhino/bacnet/datalink"
+	"github.com/hootrhino/bacnet/encoding"
+	"github.com/hootrhino/bacnet/helpers/validation"
+	"github.com/hootrhino/bacnet/tsm"
+	"github.com/hootrhino/bacnet/utsm"
 	"github.com/sirupsen/logrus"
 )
 
@@ -44,6 +47,9 @@ type client struct {
 	utsm           *utsm.Manager
 	readBufferPool sync.Pool
 	log            *logrus.Logger
+	deviceId       uint32
+	vendorId       uint32
+	netWorkId      uint16
 }
 
 type ClientBuilder struct {
@@ -53,6 +59,9 @@ type ClientBuilder struct {
 	Port       int
 	SubnetCIDR int
 	MaxPDU     uint16
+	NetWorkId  uint16
+	DeviceId   uint32
+	VendorId   uint32
 }
 
 // NewClient creates a new client with the given interface and
@@ -104,8 +113,11 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	}
 
 	cli := &client{
-		dataLink: dataLink,
-		tsm:      tsm.New(defaultStateSize),
+		deviceId:  cb.DeviceId,
+		vendorId:  cb.VendorId,
+		dataLink:  dataLink,
+		netWorkId: cb.NetWorkId,
+		tsm:       tsm.New(defaultStateSize),
 		utsm: utsm.NewManager(
 			utsm.DefaultSubscriberTimeout(time.Second*time.Duration(10)),
 			utsm.DefaultSubscriberLastReceivedTimeout(time.Second*time.Duration(2)),
@@ -118,21 +130,32 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	return cli, nil
 }
 
+// GetBroadcastAddress uses the given address with subnet to return the broadcast address
+func (c *client) GetBroadcastAddress() *btypes.Address {
+	return c.dataLink.GetBroadcastAddress()
+}
+func (c *client) GetMyAddress() *btypes.Address {
+	return c.dataLink.GetMyAddress()
+}
+func (c *client) GetListener() *net.UDPConn {
+	return c.dataLink.GetListener()
+}
+
 func (c *client) ClientRun() {
 	var err error = nil
 	for err == nil {
 		b := c.readBufferPool.Get().([]byte)
-		var addr *btypes.Address
-		var n int
-		addr, n, err = c.dataLink.Receive(b)
+		// var addr *btypes.Address
+		// var n int
+		pduAddr, udpAddr, n, err := c.dataLink.ReceiveFrom(b)
 		if err != nil {
 			continue
 		}
-		go c.handleMsg(addr, b[:n])
+		go c.handleMsg(pduAddr, udpAddr, b[:n])
 	}
 }
 
-func (c *client) handleMsg(src *btypes.Address, b []byte) {
+func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) {
 	var header btypes.BVLC
 	var npdu btypes.NPDU
 	var apdu btypes.APDU
@@ -150,20 +173,18 @@ func (c *client) handleMsg(src *btypes.Address, b []byte) {
 		if err != nil {
 			return
 		}
-
 		if npdu.IsNetworkLayerMessage {
 			c.log.Debug("Ignored Network Layer Message")
 			if npdu.NetworkLayerMessageType == ndpu.NetworkIs {
 				c.utsm.Publish(int(npdu.Source.Net), npdu)
-				//return
+				return
 			}
 			if npdu.NetworkLayerMessageType == ndpu.IamRouterToNetwork {
 				c.utsm.Publish(int(npdu.Source.Net), networkList)
-				//return
+				return
 			}
 
 		}
-
 		// We want to keep the APDU intact, so we will get a snapshot before decoding
 		send := dec.Bytes()
 		err = dec.APDU(&apdu)
@@ -201,8 +222,29 @@ func (c *client) handleMsg(src *btypes.Address, b []byte) {
 				dec := encoding.NewDecoder(apdu.RawData)
 				var low, high int32
 				dec.WhoIs(&low, &high)
-				// For now we are going to ignore who is request.
-				//log.WithFields(log.Fields{"low": low, "high": high}).Debug("WHO IS Request")
+
+				reply := false
+				if low == -1 || high == -1 {
+					reply = true
+				} else if low <= int32(c.deviceId) && high >= int32(c.deviceId) {
+					reply = true
+				}
+
+				if reply {
+					iam := btypes.IAm{
+						ID: btypes.ObjectID{
+							Type:     btypes.TypeDeviceType,
+							Instance: btypes.ObjectInstance(c.deviceId),
+						},
+						MaxApdu:      2048, //2KB
+						Segmentation: btypes.Enumerated(segmentation.NoSegmentation),
+						Vendor:       c.vendorId,
+					}
+					err := c.IAm(*src, iam)
+					if err != nil {
+						c.log.Errorf("send I-AM failed err:%v", err)
+					}
+				}
 			} else {
 				c.log.Errorf("Unconfirmed: %d %v", apdu.UnconfirmedService, apdu.RawData)
 			}
@@ -219,8 +261,84 @@ func (c *client) handleMsg(src *btypes.Address, b []byte) {
 				return
 			}
 		case btypes.ConfirmedServiceRequest:
-			c.log.Debug("Received  Confirmed Service Request")
-			err := c.tsm.Send(int(apdu.InvokeId), send)
+			c.log.Debug("Received Confirmed Service Request")
+			if apdu.Service == btypes.ServiceConfirmedReadPropMultiple {
+				Encoder := encoding.NewEncoder()
+				Encoder.BVLC(btypes.BVLC{
+					Type:     0x81,
+					Function: 0x0A,
+					Length:   0, // 后面会填上
+				})
+				Encoder.NPDU(&btypes.NPDU{
+					Version:     btypes.ProtocolVersion,
+					Destination: src,
+				})
+				Decoder := encoding.NewDecoder(apdu.RawData)
+				PropertyDataRequest := btypes.PropertyData{
+					Object: btypes.Object{
+						ID: btypes.ObjectID{
+							Type:     btypes.AnalogInput,
+							Instance: 0,
+						},
+						Properties: []btypes.Property{},
+					},
+				}
+				errReadMultiplePropertyAck := Decoder.ReadProperty(&PropertyDataRequest)
+				if errReadMultiplePropertyAck != nil {
+					c.log.Error("Error sending data:", errReadMultiplePropertyAck)
+					return
+				}
+				// 要读ObjectInstance代表的对象的属性表
+				ObjectInstance := PropertyDataRequest.Object.ID.Instance
+
+				RequiredPropertiesResponse := apdus.NewRequiredPropertiesResponse(apdu.InvokeId, uint32(ObjectInstance))
+				Encoder.ReadMultiplePropertyAck(apdu.InvokeId, RequiredPropertiesResponse)
+				_, errWrite := c.GetListener().WriteTo(Encoder.Packet(), udpAddr)
+				if errWrite != nil {
+					c.log.Error("Error sending data:", errWrite)
+					return
+				}
+			}
+			// 读Object Property
+			if apdu.Service == btypes.ServiceConfirmedReadProperty {
+				decoder := encoding.NewDecoder(apdu.RawData)
+				PropertyData := btypes.PropertyData{
+					Object: btypes.Object{
+						Properties: []btypes.Property{},
+					},
+				}
+				err := decoder.ReadProperty(&PropertyData)
+				if err != nil {
+					c.log.Errorf("decoder ReadProperty failed; %d %v err=%v", apdu.Service, apdu.RawData, err)
+					return
+				}
+				// 返回列表: ArrayIndex 就是对象ID
+				ArrayIndex := PropertyData.Object.Properties[0].ArrayIndex
+				if ArrayIndex == 0 {
+					// 设备id + service=readProperty + object-list(76)
+					// ARRAY index = 0, 返回个数
+					// array index = 1, 返回第一个object
+					// array index = 2, 返回第二个object
+					PropertyResponseBytes, _ := apdus.NewReadPropertyListResponse(apdu.InvokeId, c.deviceId, uint8(10))
+					_, errWrite := c.GetListener().WriteTo(PropertyResponseBytes, udpAddr)
+					if errWrite != nil {
+						c.log.Error("Error sending data:", errWrite)
+						return
+					}
+					return
+				} else {
+					// 遍历属性
+					// ArrayIndex 是外面传进来的遍历索引，有几个 这个ArrayIndex就递增几次
+					PropertyResponseBytes, _ := apdus.NewReadPropertyResponse(apdu.InvokeId, c.deviceId, ArrayIndex)
+					_, errWrite := c.GetListener().WriteTo(PropertyResponseBytes, udpAddr)
+					if errWrite != nil {
+						c.log.Error("Error sending data:", errWrite)
+						return
+					}
+				}
+			} else {
+				c.log.Errorf("Confimed: %d %v", apdu.Service, apdu.RawData)
+			}
 			if err != nil {
 				return
 			}

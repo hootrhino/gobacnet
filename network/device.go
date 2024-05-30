@@ -2,8 +2,9 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 type Device struct {

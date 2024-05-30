@@ -3,11 +3,12 @@ package bacnet
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/datalink"
-	"github.com/BeatTime/bacnet/encoding"
 	"log"
 	"testing"
+
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/datalink"
+	"github.com/hootrhino/bacnet/encoding"
 )
 
 const interfaceName = "eth0"

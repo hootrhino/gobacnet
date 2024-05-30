@@ -1,6 +1,6 @@
 package btypes
 
-import "github.com/BeatTime/bacnet/btypes/ndpu"
+import "github.com/hootrhino/bacnet/btypes/ndpu"
 
 type NPDUPriority byte
 
@@ -30,4 +30,16 @@ type NPDU struct {
 	ExpectingReply          bool
 	Priority                NPDUPriority
 	HopCount                uint8
+}
+
+func NewNPDU() NPDU {
+
+	return NPDU{
+		Version:                 1,
+		Destination:             &Address{},
+		Source:                  &Address{},
+		VendorId:                0,
+		IsNetworkLayerMessage:   false,
+		NetworkLayerMessageType: ndpu.NetworkMessageType(None),
+	}
 }

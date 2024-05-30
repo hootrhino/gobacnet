@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	pprint "github.com/BeatTime/bacnet/helpers/print"
-	"github.com/BeatTime/bacnet/network"
+
+	"github.com/hootrhino/bacnet"
+	pprint "github.com/hootrhino/bacnet/helpers/print"
+	"github.com/hootrhino/bacnet/network"
 	"github.com/spf13/cobra"
 )
 

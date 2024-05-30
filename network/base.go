@@ -2,7 +2,8 @@ package network
 
 import (
 	"errors"
-	"github.com/BeatTime/bacnet"
+
+	"github.com/hootrhino/bacnet"
 	log "github.com/sirupsen/logrus"
 )
 

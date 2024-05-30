@@ -1,7 +1,7 @@
 package network
 
 import (
-	"github.com/BeatTime/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes"
 	log "github.com/sirupsen/logrus"
 )
 

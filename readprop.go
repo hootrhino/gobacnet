@@ -3,10 +3,11 @@ package bacnet
 import (
 	"context"
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/encoding"
 	"log"
 	"time"
+
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/encoding"
 )
 
 // ReadProperty reads a single property from a single object in the given device.

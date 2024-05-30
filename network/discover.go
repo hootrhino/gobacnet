@@ -2,8 +2,9 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,10 +16,10 @@ type DevicePoints struct {
 	ProtocolServicesSupported *btypes.BitString `json:"protocol_services_supported"`
 }
 
-//GetDevicePoints build a device points list
-//first read device and see what it supports and get the name and so on
-//try and get the object list if it's an error then loop through the arrayIndex to build the object list
-//with the object list do a point's discovery, get the name, units and so on
+// GetDevicePoints build a device points list
+// first read device and see what it supports and get the name and so on
+// try and get the object list if it's an error then loop through the arrayIndex to build the object list
+// with the object list do a point's discovery, get the name, units and so on
 func (device *Device) GetDevicePoints(deviceID btypes.ObjectInstance) (resp []*PointDetails, err error) {
 	resp = []*PointDetails{}
 	list, err := device.DeviceObjects(deviceID, true)
@@ -49,9 +50,9 @@ type DeviceDetails struct {
 	ProtocolServicesSupported *btypes.BitString `json:"protocol_services_supported"`
 }
 
-//GetDeviceDetails get the device name, max adpu and so on
-//first read device and see what it supports and get the name and so on
-//try and get the object list if it's an error then loop through the arrayIndex to build the object list
+// GetDeviceDetails get the device name, max adpu and so on
+// first read device and see what it supports and get the name and so on
+// try and get the object list if it's an error then loop through the arrayIndex to build the object list
 func (device *Device) GetDeviceDetails(deviceID btypes.ObjectInstance) (resp *DeviceDetails, err error) {
 	resp = &DeviceDetails{}
 	obj := &Object{

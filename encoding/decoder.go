@@ -3,7 +3,8 @@ package encoding
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/BeatTime/bacnet/btypes"
+
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 // Decoder used

@@ -2,7 +2,8 @@ package data
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
+
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 func ToBitString(d btypes.PropertyData) (ok bool, out *btypes.BitString) {

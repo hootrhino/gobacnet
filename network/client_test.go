@@ -2,11 +2,12 @@ package network
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	segmentation2 "github.com/BeatTime/bacnet/btypes/segmentation"
 
-	//"github.com/BeatTime/bacnet"
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	segmentation2 "github.com/hootrhino/bacnet/btypes/segmentation"
+
+	//"github.com/hootrhino/bacnet"
 
 	"testing"
 )

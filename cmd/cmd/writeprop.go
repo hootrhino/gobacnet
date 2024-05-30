@@ -2,13 +2,14 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet"
-	"github.com/BeatTime/bacnet/btypes"
-	"github.com/BeatTime/bacnet/btypes/null"
-	ip2bytes "github.com/BeatTime/bacnet/helpers/ipbytes"
+	"strconv"
+
+	"github.com/hootrhino/bacnet"
+	"github.com/hootrhino/bacnet/btypes"
+	"github.com/hootrhino/bacnet/btypes/null"
+	ip2bytes "github.com/hootrhino/bacnet/helpers/ipbytes"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"strconv"
 )
 
 // write represents the write command

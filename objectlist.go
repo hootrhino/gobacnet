@@ -2,7 +2,8 @@ package bacnet
 
 import (
 	"fmt"
-	"github.com/BeatTime/bacnet/btypes"
+
+	"github.com/hootrhino/bacnet/btypes"
 )
 
 func (c *client) objectListLen(dev btypes.Device) (int, error) {
