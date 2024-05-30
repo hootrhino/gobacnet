@@ -29,42 +29,43 @@ import "github.com/hootrhino/bacnet/btypes"
 func NewAIPropertyWithRequiredFields(ObjectName string, ObjectInstance uint32,
 	PresentValue interface{}, // uint32 or float32 二进制
 	ObjectDescription string) [2]btypes.Object {
+	Properties := [7]btypes.Property{
+		{ //0 PresentValue
+			Type: btypes.PROP_PRESENT_VALUE,
+			Data: PresentValue,
+		},
+		{ //1 ObjectName
+			Type: btypes.PROP_OBJECT_NAME,
+			Data: ObjectName,
+		},
+		{ //2 ObjectInstance
+			Type: btypes.PROP_OBJECT_IDENTIFIER,
+			Data: ObjectInstance,
+		},
+		{ //3
+			Type: btypes.PROP_OUT_OF_SERVICE,
+			Data: uint16(0),
+		},
+		{ //4
+			Type: btypes.PROP_STATUS_FLAGS,
+			Data: uint16(0),
+		},
+		{ //5
+			Type: btypes.PROP_EVENT_STATE,
+			Data: uint16(0),
+		},
+		{ //6
+			Type: btypes.PropUnits,
+			Data: uint16(0x915F),
+		},
+	}
 	return [2]btypes.Object{
 		{
 			ID: btypes.ObjectID{
 				Type:     btypes.AnalogInput,
 				Instance: btypes.ObjectInstance(ObjectInstance),
 			},
-			Properties: []btypes.Property{
-				{
-					Type: btypes.PROP_OBJECT_NAME,
-					Data: ObjectName,
-				},
-				{
-					Type: btypes.PROP_PRESENT_VALUE,
-					Data: PresentValue,
-				},
-				{
-					Type: btypes.PROP_OBJECT_IDENTIFIER,
-					Data: ObjectInstance,
-				},
-				{
-					Type: btypes.PROP_OUT_OF_SERVICE,
-					Data: uint16(0),
-				},
-				{
-					Type: btypes.PROP_STATUS_FLAGS,
-					Data: uint16(0),
-				},
-				{
-					Type: btypes.PROP_EVENT_STATE,
-					Data: uint16(0),
-				},
-				{
-					Type: btypes.PropUnits,
-					Data: uint16(0x915F),
-				},
-			},
+			Properties: Properties[:],
 		},
 		{
 			ID: btypes.ObjectID{
