@@ -7,6 +7,20 @@ import (
 	"github.com/hootrhino/bacnet/btypes"
 )
 
+func (e *Encoder) PackageReadMultiplePropertyAck(invokeID uint8, data btypes.MultiplePropertyData) error {
+	a := btypes.APDU{
+		DataType: btypes.ComplexAck,
+		Service:  btypes.ServiceConfirmedReadPropMultiple,
+		InvokeId: invokeID,
+	}
+	e.APDU(a)
+	err := e.objectsWithData(data.Objects)
+	if err != nil {
+		return err
+	}
+
+	return e.Error()
+}
 func (e *Encoder) ReadMultiplePropertyAck(invokeID uint8, data btypes.MultiplePropertyData) error {
 	a := btypes.APDU{
 		DataType: btypes.ComplexAck,
@@ -123,7 +137,7 @@ func (e *Encoder) propertiesWithData(properties []btypes.Property) error {
 			switch T := prop.Data.(type) {
 			case uint16:
 				e.write(uint8(0x91))
-				e.write(T)
+				e.write(uint8(0x5F))
 			default:
 				panic(fmt.Errorf(" Unsupported Type: %v", T))
 			}

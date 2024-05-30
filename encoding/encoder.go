@@ -32,7 +32,7 @@ func (e *Encoder) Bytes() []byte {
 }
 
 // Packet是重新计算长度后的字节
-func (e *Encoder) Packet() []byte {
+func (e *Encoder) Package() []byte {
 	Len, _ := apdus.IntToBVLCLen(uint16(len(e.Bytes()))) // 计算包长
 	e.Bytes()[2] = Len[0]                                // 填充包长
 	e.Bytes()[3] = Len[1]                                // 填充包长

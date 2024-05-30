@@ -31,7 +31,7 @@ func NewReadPropertyListResponse(InvokeId uint8, deviceId uint32, propertiesCoun
 		0x30,                                              // Type: Complex-ACK (3)
 		InvokeId,                                          // Invoke ID
 		0x0c,                                              // Service Choice: readProperty (12)
-		0x0c, 0x02, DeviceId[0], DeviceId[1], DeviceId[2], // ObjectIdentifier: device, 1314
+		0x0c, 0x02, DeviceId[0], DeviceId[1], DeviceId[2], // ObjectIdentifier: device, id
 		0x19, 0x4c, // Property Identifier: object-list (76)
 		0x29,
 		0x00,                                          // property Array Index (Unsigned) 0

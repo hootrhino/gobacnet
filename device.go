@@ -50,18 +50,33 @@ type client struct {
 	deviceId       uint32
 	vendorId       uint32
 	netWorkId      uint16
+	// Analog Input Object:
+	//-------------------------------------
+	//     Object_Name: "test"
+	//     Object_Identifier: 0000001
+	//     Object_Type: AI.
+	//     Present_Value: 1.23.
+	//     Status_Flags: 0
+	//     Event_State: 0
+	//     Out_of_Service: 0
+	//-------------------------------------
+	//     Description: description
+	//-------------------------------------
+	// Description 是单独一个Object
+	selfMultiplePropertyData map[uint32][2]btypes.Object // 点位, 后续对外提供的服务就是这个
 }
 
 type ClientBuilder struct {
-	DataLink   datalink.DataLink
-	Interface  string
-	Ip         string
-	Port       int
-	SubnetCIDR int
-	MaxPDU     uint16
-	NetWorkId  uint16
-	DeviceId   uint32
-	VendorId   uint32
+	DataLink             datalink.DataLink
+	Interface            string
+	Ip                   string
+	Port                 int
+	SubnetCIDR           int
+	MaxPDU               uint16
+	NetWorkId            uint16
+	DeviceId             uint32
+	VendorId             uint32
+	MultiplePropertyData map[uint32][2]btypes.Object
 }
 
 // NewClient creates a new client with the given interface and
@@ -113,11 +128,12 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 	}
 
 	cli := &client{
-		deviceId:  cb.DeviceId,
-		vendorId:  cb.VendorId,
-		dataLink:  dataLink,
-		netWorkId: cb.NetWorkId,
-		tsm:       tsm.New(defaultStateSize),
+		deviceId:                 cb.DeviceId,
+		vendorId:                 cb.VendorId,
+		dataLink:                 dataLink,
+		netWorkId:                cb.NetWorkId,
+		selfMultiplePropertyData: cb.MultiplePropertyData,
+		tsm:                      tsm.New(defaultStateSize),
 		utsm: utsm.NewManager(
 			utsm.DefaultSubscriberTimeout(time.Second*time.Duration(10)),
 			utsm.DefaultSubscriberLastReceivedTimeout(time.Second*time.Duration(2)),
@@ -128,6 +144,17 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 		log: logger,
 	}
 	return cli, nil
+}
+
+// 根据Bacnet请求查点位里面的数据
+func (c *client) GetObjectProperties(ObjectInstanceId uint32) (btypes.MultiplePropertyData, error) {
+	Objects, ok := c.selfMultiplePropertyData[ObjectInstanceId]
+	if ok {
+		return btypes.MultiplePropertyData{
+			Objects: Objects[:],
+		}, nil
+	}
+	return btypes.MultiplePropertyData{}, fmt.Errorf(" Property not exists")
 }
 
 // GetBroadcastAddress uses the given address with subnet to return the broadcast address
@@ -151,6 +178,7 @@ func (c *client) ClientRun() {
 		if err != nil {
 			continue
 		}
+		// TODO 多线程是否会影响到请求顺序？
 		go c.handleMsg(pduAddr, udpAddr, b[:n])
 	}
 }
@@ -166,7 +194,9 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 		return
 	}
 
-	if header.Function == btypes.BacFuncBroadcast || header.Function == btypes.BacFuncUnicast || header.Function == btypes.BacFuncForwardedNPDU {
+	if header.Function == btypes.BacFuncBroadcast ||
+		header.Function == btypes.BacFuncUnicast ||
+		header.Function == btypes.BacFuncForwardedNPDU {
 		// Remove the header information
 		b = b[mtuHeaderLength:]
 		networkList, err := dec.NPDU(&npdu)
@@ -267,7 +297,6 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 				Encoder.BVLC(btypes.BVLC{
 					Type:     0x81,
 					Function: 0x0A,
-					Length:   0, // 后面会填上
 				})
 				Encoder.NPDU(&btypes.NPDU{
 					Version:     btypes.ProtocolVersion,
@@ -288,14 +317,22 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 					c.log.Error("Error sending data:", errReadMultiplePropertyAck)
 					return
 				}
-				// 要读ObjectInstance代表的对象的属性表
+				// ObjectInstance: 要读 ObjectInstance 代表的对象的属性表
 				ObjectInstance := PropertyDataRequest.Object.ID.Instance
-
-				RequiredPropertiesResponse := apdus.NewRequiredPropertiesResponse(apdu.InvokeId, uint32(ObjectInstance))
-				Encoder.ReadMultiplePropertyAck(apdu.InvokeId, RequiredPropertiesResponse)
-				_, errWrite := c.GetListener().WriteTo(Encoder.Packet(), udpAddr)
+				// 这个地方应该分两种情况
+				// 1 来自对象的必须属性（7类）
+				// 2 额外属性
+				// 但是当前阶段暂时支持必须属性
+				ObjectProperties, errGetObjectProperties := c.GetObjectProperties(uint32(ObjectInstance))
+				if errGetObjectProperties != nil {
+					c.log.Error("Error GetObjectProperties:", errGetObjectProperties)
+					return
+				}
+				// RequiredPropertiesResponse := apdus.NewRequiredPropertiesResponse(apdu.InvokeId, uint32(ObjectInstance))
+				Encoder.PackageReadMultiplePropertyAck(apdu.InvokeId, ObjectProperties)
+				_, errWrite := c.GetListener().WriteTo(Encoder.Package(), udpAddr)
 				if errWrite != nil {
-					c.log.Error("Error sending data:", errWrite)
+					c.log.Error("Error Write To data:", errWrite)
 					return
 				}
 			}
@@ -319,16 +356,18 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 					// ARRAY index = 0, 返回个数
 					// array index = 1, 返回第一个object
 					// array index = 2, 返回第二个object
-					PropertyResponseBytes, _ := apdus.NewReadPropertyListResponse(apdu.InvokeId, c.deviceId, uint8(10))
+					PropertyResponseBytes, _ := apdus.NewReadPropertyListResponse(apdu.InvokeId,
+						c.deviceId, uint8(len((c.selfMultiplePropertyData))))
 					_, errWrite := c.GetListener().WriteTo(PropertyResponseBytes, udpAddr)
 					if errWrite != nil {
 						c.log.Error("Error sending data:", errWrite)
 						return
 					}
-					return
 				} else {
-					// 遍历属性
+					// 遍历属性 for  1 2 3 4... N
 					// ArrayIndex 是外面传进来的遍历索引，有几个 这个ArrayIndex就递增几次
+					// 让 ArrayIndex 在点位表里面检索
+					// if is required ..
 					PropertyResponseBytes, _ := apdus.NewReadPropertyResponse(apdu.InvokeId, c.deviceId, ArrayIndex)
 					_, errWrite := c.GetListener().WriteTo(PropertyResponseBytes, udpAddr)
 					if errWrite != nil {
@@ -338,9 +377,6 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 				}
 			} else {
 				c.log.Errorf("Confimed: %d %v", apdu.Service, apdu.RawData)
-			}
-			if err != nil {
-				return
 			}
 		case btypes.Error:
 			err := fmt.Errorf("error class %s code %s", apdu.Error.Class.String(), apdu.Error.Code.String())
