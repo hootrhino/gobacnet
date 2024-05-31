@@ -173,6 +173,11 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 		c.log.Error(err)
 		return
 	}
+	defer func() {
+		if r := recover(); r != nil {
+			c.log.Errorf("handleMsg recover: %v", r)
+		}
+	}()
 
 	if header.Function == btypes.BacFuncBroadcast ||
 		header.Function == btypes.BacFuncUnicast ||
