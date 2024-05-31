@@ -16,13 +16,14 @@ func main() {
 		Ip:         "192.168.10.163",
 		Port:       47808,
 		SubnetCIDR: 24,
-		DeviceId:   10,
-		VendorId:   10,
-		NetWorkId:  10,
+		DeviceId:   0,
+		VendorId:   0,
+		NetWorkId:  0,
 		PropertyData: map[uint32][2]btypes.Object{
-			1: apdus.NewAIPropertyWithRequiredFields("temp", 1, float32(3.14), "empty"),
-			2: apdus.NewAIPropertyWithRequiredFields("humi", 2, float32(77.67), "empty"),
-			3: apdus.NewAIPropertyWithRequiredFields("pres", 3, float32(101.11), "empty"),
+			0: apdus.NewAIPropertyWithRequiredFields("altitude", 0, float32(8848.46), ""),
+			1: apdus.NewAIPropertyWithRequiredFields("temp", 1, float32(3.14), ""),
+			2: apdus.NewAIPropertyWithRequiredFields("humi", 2, float32(77.67), ""),
+			3: apdus.NewAIPropertyWithRequiredFields("pres", 3, float32(101.11), ""),
 		},
 	})
 	if err != nil {
