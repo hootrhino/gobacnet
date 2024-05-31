@@ -7,6 +7,11 @@ import (
 	"github.com/hootrhino/gobacnet/btypes"
 )
 
+/*
+*
+* 打包点位表
+*
+ */
 func (e *Encoder) PackageReadMultiplePropertyAck(invokeID uint8, data btypes.MultiplePropertyData) error {
 	a := btypes.APDU{
 		DataType: btypes.ComplexAck,
@@ -87,7 +92,11 @@ func (e *Encoder) propertiesWithData(properties []btypes.Property) error {
 			switch T := prop.Data.(type) {
 			case uint32:
 				e.write(uint8(0xC4))
-				e.write(T)
+				if T == 0 {
+					e.write(uint32(0x00000000))
+				} else {
+					e.write(T)
+				}
 			default:
 				panic(fmt.Errorf(" Unsupported Type: %v", T))
 			}
