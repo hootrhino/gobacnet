@@ -24,24 +24,6 @@ const mtuHeaderLength = 4
 const defaultStateSize = 20
 const forwardHeaderLength = 10
 
-type Client interface {
-	io.Closer
-	ClientClose(closeLogs bool) error
-	ClientRun()
-	WhoIs(wh *WhoIsOpts) ([]btypes.Device, error)
-	WhatIsNetworkNumber() []*btypes.Address
-	IAm(dest btypes.Address, iam btypes.IAm) error
-	WhoIsRouterToNetwork() (resp *[]btypes.Address)
-	Objects(dev btypes.Device) (btypes.Device, error)
-	ReadProperty(dest btypes.Device, rp btypes.PropertyData) (btypes.PropertyData, error)
-	ReadMultiProperty(dev btypes.Device, rp btypes.MultiplePropertyData) (btypes.MultiplePropertyData, error)
-	WriteProperty(dest btypes.Device, wp btypes.PropertyData) error
-	WriteMultiProperty(dev btypes.Device, wp btypes.MultiplePropertyData) error
-	SetLogger(*logrus.Logger) error
-	GetLogger() *logrus.Logger
-	GetBacnetIPServer() *BacnetIPServer
-}
-
 type client struct {
 	dataLink       datalink.DataLink
 	tsm            *tsm.TSM
@@ -241,7 +223,8 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 				reply := false
 				if low == -1 || high == -1 {
 					reply = true
-				} else if low <= int32(c.deviceId) && high >= int32(c.deviceId) {
+				}
+				if low <= int32(c.deviceId) && high >= int32(c.deviceId) {
 					reply = true
 				}
 
