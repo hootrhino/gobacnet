@@ -26,17 +26,16 @@ func NewIAm(deviceId uint32, vendorId uint16, networkId uint16) ([]byte, error) 
 	if err2 != nil {
 		return nil, err2
 	}
-	NetworkId, err2 := IntToNetworkId(networkId)
-	if err2 != nil {
-		return nil, err2
-	}
-	iAm := [30]byte{
-		0x81, 0x0a, 0x00, 0x1d, // BACNET
-		0x01,                       // Version
-		0x20,                       // Packet Ctrl
-		NetworkId[0], NetworkId[1], // Source Bacnet Network Address
-		0x06,                               // Source Mac Length
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Source MAC Addr
+	// NetworkId, err2 := IntToNetworkId(networkId)
+	// if err2 != nil {
+	// 	return nil, err2
+	// }
+	iAm := [21]byte{
+		// BACnet Virtual Link Control------------------------------------------------
+		0x81, 0x0a, 0x00, 0x1d,
+		// NPDU-----------------------------------------------------------------------
+		0x01, 0x00, // 0x00, 0x01, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		// APDU-----------------------------------------------------------------------
 		0x10,                                                                      // APDU Type
 		0x00,                                                                      // Service Choice: 00 IAM
 		0xc4, 0x02, DeviceInstanceId[0], DeviceInstanceId[1], DeviceInstanceId[2], // DeviceID

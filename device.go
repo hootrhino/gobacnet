@@ -11,7 +11,6 @@ import (
 	"github.com/hootrhino/gobacnet/apdus"
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/hootrhino/gobacnet/btypes/ndpu"
-	"github.com/hootrhino/gobacnet/btypes/segmentation"
 	"github.com/hootrhino/gobacnet/datalink"
 	"github.com/hootrhino/gobacnet/encoding"
 	"github.com/hootrhino/gobacnet/helpers/validation"
@@ -96,7 +95,10 @@ func NewClient(cb *ClientBuilder) (Client, error) {
 			return nil, err
 		}
 	}
-
+	// 1-65,534
+	if cb.NetWorkId > 65534 {
+		panic(fmt.Errorf("BACnet network numbers with a Range of 1-65534"))
+	}
 	cli := &client{
 		deviceId:  cb.DeviceId,
 		vendorId:  cb.VendorId,
@@ -229,18 +231,15 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 				}
 
 				if reply {
-					iam := btypes.IAm{
-						ID: btypes.ObjectID{
-							Type:     btypes.TypeDeviceType,
-							Instance: btypes.ObjectInstance(c.deviceId),
-						},
-						MaxApdu:      2048, //2KB
-						Segmentation: btypes.Enumerated(segmentation.NoSegmentation),
-						Vendor:       c.vendorId,
+					iamBytes, errNewIAm := apdus.NewIAm(c.deviceId, uint16(c.vendorId), c.netWorkId)
+					if errNewIAm != nil {
+						c.log.Errorf("New IAm failed err:%v", errNewIAm)
 					}
-					err := c.IAm(*src, iam)
-					if err != nil {
-						c.log.Errorf("send I-AM failed err:%v", err)
+					c.log.Println("who is from:", udpAddr.String())
+					_, errWrite := c.GetListener().WriteTo(iamBytes, udpAddr)
+					if errWrite != nil {
+						c.log.Error("Error Write To data:", errWrite)
+						return
 					}
 				}
 			} else {
