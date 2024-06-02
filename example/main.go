@@ -21,7 +21,7 @@ func main() {
 		Ip:         os.Args[1],
 		Port:       47808,
 		SubnetCIDR: 24,
-		DeviceId:   1,
+		DeviceId:   1003,
 		VendorId:   1234,
 		NetWorkId:  1000, // 1-65,534
 		PropertyData: map[uint32][2]btypes.Object{
