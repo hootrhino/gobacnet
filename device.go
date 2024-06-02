@@ -133,16 +133,12 @@ func (c *client) GetBacnetIPServer() *BacnetIPServer {
 }
 
 func (c *client) ClientRun() {
-	var err error = nil
-	for err == nil {
+	for {
 		b := c.readBufferPool.Get().([]byte)
-		// var addr *btypes.Address
-		// var n int
 		pduAddr, udpAddr, n, err := c.dataLink.ReceiveFrom(b)
 		if err != nil {
 			continue
 		}
-		// TODO 多线程是否会影响到请求顺序？
 		go c.handleMsg(pduAddr, udpAddr, b[:n])
 	}
 }
@@ -234,8 +230,10 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 					iamBytes, errNewIAm := apdus.NewIAm(c.deviceId, uint16(c.vendorId), c.netWorkId)
 					if errNewIAm != nil {
 						c.log.Errorf("New IAm failed err:%v", errNewIAm)
+						return
 					}
 					c.log.Debug("who is from:", udpAddr.String())
+					c.log.Debug("I AM to:", udpAddr.String())
 					_, errWrite := c.GetListener().WriteTo(iamBytes, udpAddr)
 					if errWrite != nil {
 						c.log.Error("Error Write To data:", errWrite)

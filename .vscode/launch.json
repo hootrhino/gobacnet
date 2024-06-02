@@ -9,7 +9,10 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "./cmd/main.go"
+            "program": "./example/main.go",
+            "args": [
+                "192.168.10.163"
+            ]
         }
     ]
 }

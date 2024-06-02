@@ -30,11 +30,11 @@ func NewIAm(deviceId uint32, vendorId uint16, networkId uint16) ([]byte, error) 
 	if err2 != nil {
 		return nil, err2
 	}
-	iAm := [24]byte{
+	iAm := [25]byte{
 		// BACnet Virtual Link Control------------------------------------------------
 		0x81, 0x0a, 0x00, 0x1d,
 		// NPDU-----------------------------------------------------------------------
-		0x01, 0x20, 0x00, NetworkId[0], NetworkId[1], /*Hop*/
+		0x01, 0x20, NetworkId[0], NetworkId[1], 00, 0xFF, /*Hop*/
 		// APDU-----------------------------------------------------------------------
 		0x10,                                                                      // APDU Type
 		0x00,                                                                      // Service Choice: 00 IAM
@@ -43,5 +43,8 @@ func NewIAm(deviceId uint32, vendorId uint16, networkId uint16) ([]byte, error) 
 		0x91, 0x00, // Segment
 		0x22, VendorId[0], VendorId[1], // VendorId 0x22 2Byte
 	}
+	Len, _ := IntToBVLCLen(uint16(len(iAm)))
+	iAm[2] = Len[0]
+	iAm[3] = Len[1]
 	return iAm[:], nil
 }
