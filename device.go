@@ -235,7 +235,7 @@ func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) 
 					if errNewIAm != nil {
 						c.log.Errorf("New IAm failed err:%v", errNewIAm)
 					}
-					c.log.Println("who is from:", udpAddr.String())
+					c.log.Debug("who is from:", udpAddr.String())
 					_, errWrite := c.GetListener().WriteTo(iamBytes, udpAddr)
 					if errWrite != nil {
 						c.log.Error("Error Write To data:", errWrite)

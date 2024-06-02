@@ -1,19 +1,24 @@
 package main
 
 import (
-	"fmt"
 	"math/rand/v2"
+	"os"
 	"time"
 
 	"github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/apdus"
 	"github.com/hootrhino/gobacnet/btypes"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
-	// cmd.Execute()
+	if len(os.Args) < 2 {
+		panic("Missing Ip")
+	}
+	logger := logrus.New()
+	logger.SetLevel(logrus.DebugLevel)
 	client, err := bacnet.NewClient(&bacnet.ClientBuilder{
-		Ip:         "192.168.10.163",
+		Ip:         os.Args[1],
 		Port:       47808,
 		SubnetCIDR: 24,
 		DeviceId:   0x00_01_02_03,
@@ -32,16 +37,17 @@ func main() {
 			10: apdus.NewAIPropertyWithRequiredFields("altitude", 10, float32(0), "-/-"),
 		},
 	})
+	client.SetLogger(logger)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("client run success")
+	logger.Debug("client run success")
 	go func() {
 		for {
 			for i := 1; i <= 10; i++ {
 				newValue := rand.Float32()
 				client.GetBacnetIPServer().UpdateAIPropertyValue(uint32(i), newValue)
-				fmt.Println("Update Value: ", i, ", ", newValue)
+				logger.Debug("Update Value: ", i, ", ", newValue)
 			}
 			time.Sleep(3 * time.Second)
 		}
