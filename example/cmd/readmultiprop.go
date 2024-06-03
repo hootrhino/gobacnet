@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/hootrhino/gobacnet/helpers/data"
 	ip2bytes "github.com/hootrhino/gobacnet/helpers/ipbytes"

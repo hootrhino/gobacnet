@@ -3,7 +3,7 @@ package network
 import (
 	"errors"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/hootrhino/gobacnet/btypes/priority"
 	"github.com/hootrhino/gobacnet/btypes/units"

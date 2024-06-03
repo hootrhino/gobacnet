@@ -1,4 +1,4 @@
-package bacnet
+package gobacnet
 
 import (
 	"encoding/json"

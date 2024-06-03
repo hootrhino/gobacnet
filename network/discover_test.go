@@ -5,7 +5,7 @@ import (
 
 	pprint "github.com/hootrhino/gobacnet/helpers/print"
 
-	//"github.com/hootrhino/gobacnet"
+	//bacnet "github.com/hootrhino/gobacnet"
 
 	"testing"
 )

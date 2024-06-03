@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	pprint "github.com/hootrhino/gobacnet/helpers/print"
 	"github.com/kr/pretty"
 )

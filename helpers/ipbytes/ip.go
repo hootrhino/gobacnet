@@ -25,7 +25,8 @@ func pack32BinaryIP4(ip4Address string) []byte {
 	return buf.Bytes()
 }
 
-/*New ip in byte format
+/*
+New ip in byte format
 - ip with no subnet
 - port
 - returns uint8[192 168 15 10 186 192]

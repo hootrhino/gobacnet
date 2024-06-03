@@ -9,13 +9,14 @@ import (
 func sub(t *testing.T, m *Manager, start, end int) {
 	b, err := m.Subscribe(start, end)
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
+		return
 	}
 
 	t.Logf("[%d, %d] %v", start, end, b)
 }
 
-func publisher(t *testing.T, m *Manager) {
+func publisher(_ *testing.T, m *Manager) {
 	for i := 0; i < 5; i++ {
 		go m.Publish(20, fmt.Sprintf("HI!%d", i))
 		time.Sleep(time.Duration(100) * time.Millisecond)

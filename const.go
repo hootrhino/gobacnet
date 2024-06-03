@@ -1,6 +1,6 @@
-package bacnet
+package gobacnet
 
-//fail read or write retry count
+// fail read or write retry count
 const retryCount = 1
 
 // MTSP

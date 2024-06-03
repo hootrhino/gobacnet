@@ -67,9 +67,9 @@ func dataLink(ipAddr string, port int) (DataLink, error) {
 		port = 0
 	}
 
-	ip, ipNet, err := net.ParseCIDR(ipAddr)
-	if err != nil {
-		return nil, err
+	ip, ipNet, err0 := net.ParseCIDR(ipAddr)
+	if err0 != nil {
+		return nil, err0
 	}
 
 	broadcast := net.IP(make([]byte, 4))
@@ -77,20 +77,19 @@ func dataLink(ipAddr string, port int) (DataLink, error) {
 		broadcast[i] = ipNet.IP[i] | ^ipNet.Mask[i]
 	}
 
-	udp, err := net.ResolveUDPAddr("udp4", fmt.Sprintf("%s:%d", ip.String(), port))
-	if err != nil {
-		return nil, err
+	udp, err1 := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", ip.String(), port))
+	if err1 != nil {
+		return nil, err1
 	}
-	conn, err := net.ListenUDP("udp", udp)
-	if err != nil {
-		return nil, err
+	conn, err2 := net.ListenUDP("udp", udp)
+	if err2 != nil {
+		return nil, err2
 	}
-	udpAddr := conn.LocalAddr().(*net.UDPAddr)
+	udpAddr, ok := conn.LocalAddr().(*net.UDPAddr)
+	if !ok {
+		return nil, fmt.Errorf(" UDPAddr Type cast error")
+	}
 	port = udpAddr.Port
-	if err != nil {
-		return nil, err
-	}
-
 	return &udpDataLink{
 		listener:         conn,
 		myAddress:        IPPortToAddress(ip, port),
@@ -114,6 +113,8 @@ func (c *udpDataLink) Receive(data []byte) (*btypes.Address, int, error) {
 	udpAddr := UDPToAddress(adr)
 	return udpAddr, n, nil
 }
+
+// 增加了UDPAddr参数
 func (c *udpDataLink) ReceiveFrom(data []byte) (*btypes.Address, *net.UDPAddr, int, error) {
 	n, udpFromAddr, err := c.listener.ReadFromUDP(data)
 	if err != nil {

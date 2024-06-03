@@ -3,11 +3,11 @@ package network
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 	segmentation2 "github.com/hootrhino/gobacnet/btypes/segmentation"
 
-	//"github.com/hootrhino/gobacnet"
+	//bacnet "github.com/hootrhino/gobacnet"
 
 	"testing"
 )

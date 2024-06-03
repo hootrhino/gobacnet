@@ -211,7 +211,7 @@ import (
 	"math/rand/v2"
 	"time"
 
-	"github.com/hootrhino/gobacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/apdus"
 	"github.com/hootrhino/gobacnet/btypes"
 )

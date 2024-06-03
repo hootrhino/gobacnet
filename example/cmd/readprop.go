@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/hootrhino/gobacnet/btypes/services"
 	pprint "github.com/hootrhino/gobacnet/helpers/print"

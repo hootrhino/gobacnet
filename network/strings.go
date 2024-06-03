@@ -1,7 +1,7 @@
 package network
 
 import (
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 )
 

@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/hootrhino/gobacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/apdus"
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/sirupsen/logrus"
@@ -21,8 +21,8 @@ func main() {
 		Ip:         os.Args[1],
 		Port:       47808,
 		SubnetCIDR: 24,
-		DeviceId:   1003,
-		VendorId:   1234,
+		DeviceId:   163,
+		VendorId:   163,
 		NetWorkId:  1000, // 1-65,534
 		PropertyData: map[uint32][2]btypes.Object{
 			1:  apdus.NewAIPropertyWithRequiredFields("property:1", 1, float32(3.14), "-/-"),
@@ -52,7 +52,7 @@ func main() {
 		panic(err)
 	}
 	client.SetLogger(logger)
-	logger.Debug("client run success")
+	logger.Debug("Bacnet client run success")
 	go func() {
 		for {
 			for i := 1; i <= 20; i++ {

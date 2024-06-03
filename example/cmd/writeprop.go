@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/hootrhino/gobacnet/btypes/null"
 	ip2bytes "github.com/hootrhino/gobacnet/helpers/ipbytes"

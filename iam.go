@@ -1,4 +1,4 @@
-package bacnet
+package gobacnet
 
 import (
 	"github.com/hootrhino/gobacnet/btypes"

@@ -1,4 +1,4 @@
-package bacnet
+package gobacnet
 
 import (
 	"errors"
@@ -139,6 +139,7 @@ func (c *client) ClientRun() {
 		if err != nil {
 			continue
 		}
+		fmt.Println(pduAddr, udpAddr, b[:n])
 		go c.handleMsg(pduAddr, udpAddr, b[:n])
 	}
 }

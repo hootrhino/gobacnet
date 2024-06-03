@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	pprint "github.com/hootrhino/gobacnet/helpers/print"
 	"github.com/hootrhino/gobacnet/network"
 	"github.com/spf13/cobra"

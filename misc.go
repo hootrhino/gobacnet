@@ -1,4 +1,4 @@
-package bacnet
+package gobacnet
 
 // From:
 // https://stackoverflow.com/questions/6878590/the-maximum-value-for-an-int-type-in-go

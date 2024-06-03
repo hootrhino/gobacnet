@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

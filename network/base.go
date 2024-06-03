@@ -3,7 +3,7 @@ package network
 import (
 	"errors"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	log "github.com/sirupsen/logrus"
 )
 

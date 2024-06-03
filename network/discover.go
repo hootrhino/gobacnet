@@ -3,7 +3,7 @@ package network
 import (
 	"fmt"
 
-	"github.com/hootrhino/bacnet"
+	bacnet "github.com/hootrhino/gobacnet"
 	"github.com/hootrhino/gobacnet/btypes"
 	log "github.com/sirupsen/logrus"
 )
