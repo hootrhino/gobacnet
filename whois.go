@@ -1,6 +1,6 @@
 package gobacnet
 
-import "C"
+// import "C"
 import (
 	"github.com/hootrhino/gobacnet/btypes"
 	"github.com/hootrhino/gobacnet/encoding"
