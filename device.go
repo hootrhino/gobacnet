@@ -166,7 +166,7 @@ func (c *client) StartPoll(ctx context.Context) {
 
 // stop
 func (c *client) StopPoll() {
-	c.ClientClose(true)
+	c.ClientClose(false)
 	c.Close()
 }
 
