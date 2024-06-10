@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"math/rand/v2"
 	"os"
 	"time"
@@ -63,5 +64,5 @@ func main() {
 			time.Sleep(3 * time.Second)
 		}
 	}()
-	client.ClientRun()
+	client.StartPoll(context.Background())
 }

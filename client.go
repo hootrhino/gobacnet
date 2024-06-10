@@ -16,6 +16,7 @@
 package gobacnet
 
 import (
+	"context"
 	"io"
 
 	"github.com/hootrhino/gobacnet/btypes"
@@ -24,8 +25,10 @@ import (
 
 type Client interface {
 	io.Closer
-	ClientClose(closeLogs bool) error
 	ClientRun()
+	ClientClose(closeLogs bool) error
+	StartPoll(ctx context.Context)
+	StopPoll()
 	WhoIs(wh *WhoIsOpts) ([]btypes.Device, error)
 	WhatIsNetworkNumber() []*btypes.Address
 	IAm(dest btypes.Address, iam btypes.IAm) error

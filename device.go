@@ -1,6 +1,7 @@
 package gobacnet
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -132,15 +133,41 @@ func (c *client) GetBacnetIPServer() *BacnetIPServer {
 	return c.server
 }
 
+// expired
 func (c *client) ClientRun() {
+	c.StartPoll(context.Background())
+}
+
+/*
+*
+* Context
+*
+ */
+func (c *client) StartPoll(ctx context.Context) {
 	for {
+		select {
+		case <-ctx.Done():
+			{
+				return
+			}
+		default:
+			{
+			}
+		}
 		b := c.readBufferPool.Get().([]byte)
 		pduAddr, udpAddr, n, err := c.dataLink.ReceiveFrom(b)
 		if err != nil {
+			c.log.Error(err)
 			continue
 		}
 		go c.handleMsg(pduAddr, udpAddr, b[:n])
 	}
+}
+
+// stop
+func (c *client) StopPoll() {
+	c.ClientClose(true)
+	c.Close()
 }
 
 func (c *client) handleMsg(src *btypes.Address, udpAddr *net.UDPAddr, b []byte) {
